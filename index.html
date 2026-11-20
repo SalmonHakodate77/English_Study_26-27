@@ -1,0 +1,2878 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Year-End &amp; 48-Week English Study Hub — TOEIC 950 &amp; TOEFL iBT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Hiragino Kaku Gothic ProN", "Yu Gothic", "sans-serif"],
+            mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"]
+          },
+          colors: {
+            slatecard: "#111827",
+            slateborder: "#1f2937"
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.45);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.7);
+    }
+    .tab-panel {
+      animation: fadeIn 0.18s ease-out;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200 antialiased">
+  <!-- Toast Banner -->
+  <div id="toastBanner" class="fixed bottom-4 right-4 z-50 hidden max-w-md rounded-xl border border-indigo-400/40 bg-slate-900/95 text-white px-4 py-3 text-xs sm:text-sm shadow-2xl backdrop-blur">
+    <div class="flex items-start justify-between gap-3">
+      <span id="toastMessage">通知メッセージ</span>
+      <button id="toastCloseBtn" type="button" class="text-slate-400 hover:text-white font-bold px-1" aria-label="閉じる">✕</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex flex-col gap-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-cyan-500 flex items-center justify-center text-white font-black text-sm shadow-md">
+            EN
+          </div>
+          <div>
+            <h1 class="text-sm sm:text-base font-extrabold tracking-tight">
+              TOEIC 950 &amp; TOEFL iBT 1-Year Study Hub
+            </h1>
+            <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">
+              年末3日間ブースト ＋ 48週間カリキュラム（週7時間・プログラミング＆スペイン語並行対応）
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <div id="headerWeeklyBadge" class="px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-bold">
+            今週: 0.0h / 7.0h
+          </div>
+          <div id="headerRetentionBadge" class="px-2.5 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs font-mono font-bold">
+            要復習: 0語
+          </div>
+          <div id="headerApiBadge" class="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold">
+            Gemini: 未設定
+          </div>
+          <button id="openBackupModalBtn" type="button" class="px-3 py-1.5 rounded-xl border border-indigo-300/60 dark:border-indigo-700 bg-indigo-50/70 dark:bg-indigo-950/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold transition">
+            💾 JSON書出・読込
+          </button>
+          <button id="themeToggleBtn" type="button" class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold transition">
+            🌓 テーマ切替
+          </button>
+        </div>
+      </div>
+
+      <!-- Primary Tabs -->
+      <nav aria-label="メイン機能タブ" class="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+        <button type="button" data-tab="curriculum" class="main-tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition">
+          📅 カリキュラム＆週7時間管理
+        </button>
+        <button type="button" data-tab="vocab30k" class="main-tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition">
+          📚 3万語＆忘却曲線テスト（Lv.1–5）
+        </button>
+        <button type="button" data-tab="bank100" class="main-tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition">
+          📝 100問バンク（全7分野×100問）
+        </button>
+        <button type="button" data-tab="tutor" class="main-tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition">
+          🤖 Gemini AIチューター＆会話
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 space-y-6">
+    <!-- JSON Backup & Share Panel (Collapsible Modal/Drawer) -->
+    <div id="backupModalOverlay" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="w-full max-w-xl rounded-2xl bg-white dark:bg-slatecard border border-slate-200 dark:border-slateborder shadow-2xl p-5 sm:p-6 space-y-4">
+        <div class="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-extrabold">💾 学習データの JSON 書き出し・読み込み</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+              週間ログ・30,000語の忘却曲線/テスト履歴・カスタム単語・100問バンク進捗・チャット履歴をバックアップまたは別端末と共有できます。
+            </p>
+          </div>
+          <button id="closeBackupModalBtn" type="button" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold" aria-label="閉じる">✕</button>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 p-4 space-y-3">
+          <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400">1. 現在の学習データを .json ファイルとして書き出し（Export）</div>
+          <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
+            <input id="includeApiKeyInExport" type="checkbox" class="rounded text-indigo-600" />
+            <span>Gemini API キーも JSON に含める（安全のため、他人と共有する際はチェックを外したままにしてください）</span>
+          </label>
+          <div class="flex flex-wrap gap-2">
+            <button id="exportJsonBtn" type="button" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold transition">
+              ⬇ JSONファイルをダウンロード
+            </button>
+            <button id="copyJsonBtn" type="button" class="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition">
+              📋 JSONをクリップボードにコピー
+            </button>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 p-4 space-y-3">
+          <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400">2. JSON ファイルから学習データを読み込み（Import）</div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">
+            書き出した <code>.json</code> ファイルを選択すると、このブラウザの <code>localStorage</code> に学習データが復元・反映されます。
+          </p>
+          <div class="flex flex-wrap items-center gap-2">
+            <input id="importJsonFileInput" type="file" accept=".json,application/json" class="block w-full text-xs text-slate-600 dark:text-slate-300 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 cursor-pointer" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 1: CURRICULUM & WEEKLY 7-HOUR TIME MANAGER                      -->
+    <!-- ===================================================================== -->
+    <section id="tab-curriculum" class="tab-panel space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <!-- Timer & Session Logger -->
+        <div class="lg:col-span-5 bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-base font-bold">⏱️ 週7時間タイマー＆学習ログ</h2>
+            <span class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 font-semibold">
+              目標 420分/週
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div>
+              <label for="timerCategorySelect" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">学習カテゴリ</label>
+              <select id="timerCategorySelect" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs sm:text-sm font-medium">
+                <option value="TOEIC">TOEIC 950（公式10・11）</option>
+                <option value="TOEFL">TOEFL iBT（OG 8th・3800）</option>
+                <option value="Programming">プログラミング課題①/②</option>
+                <option value="Spanish">スペイン語 初級</option>
+              </select>
+            </div>
+            <div>
+              <label for="timerModeSelect" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">タイマー種別</label>
+              <select id="timerModeSelect" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs sm:text-sm font-medium">
+                <option value="stopwatch">ストップウォッチ（計測→記録）</option>
+                <option value="countdown25">集中カウントダウン（25分）</option>
+                <option value="countdown40">平日セッション（40分）</option>
+                <option value="countdown120">模試通し（120分）</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-slate-900 dark:bg-slate-950 text-white p-5 text-center border border-slate-800">
+            <div id="timerClockDisplay" class="text-3xl sm:text-4xl font-mono font-black tracking-wider">00:00:00</div>
+            <div id="timerStatusLabel" class="text-xs text-slate-400 mt-1">待機中 — スタートを押して計測開始</div>
+            <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+              <button id="timerStartPauseBtn" type="button" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold transition">
+                ▶ 開始
+              </button>
+              <button id="timerLogAndResetBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold transition">
+                ✓ 記録してリセット
+              </button>
+              <button id="timerDiscardBtn" type="button" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition">
+                リセット
+              </button>
+            </div>
+          </div>
+
+          <form id="manualLogForm" class="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2.5">
+            <div class="text-xs font-bold text-slate-600 dark:text-slate-300">手動で学習時間を追加（分）</div>
+            <div class="grid grid-cols-3 gap-2">
+              <select id="manualCategorySelect" class="col-span-1 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2.5 py-2 text-xs">
+                <option value="TOEIC">TOEIC</option>
+                <option value="TOEFL">TOEFL</option>
+                <option value="Programming">プログラミング</option>
+                <option value="Spanish">スペイン語</option>
+              </select>
+              <input id="manualMinutesInput" type="number" min="1" max="720" value="30" placeholder="分数" class="col-span-1 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs font-mono" />
+              <button type="submit" class="col-span-1 rounded-xl bg-slate-900 dark:bg-indigo-600 hover:opacity-90 text-white text-xs font-bold px-3 py-2 transition">
+                ＋ 追加
+              </button>
+            </div>
+            <input id="manualMemoInput" type="text" placeholder="メモ（例：公式11 Test1 Part5精読、英単語3800 Rank1）" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs" />
+          </form>
+        </div>
+
+        <!-- Weekly 7-Hour SVG Progress Chart & Recent Logs -->
+        <div class="lg:col-span-7 bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm flex flex-col justify-between space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="text-base font-bold">📊 今週の7時間達成グラフ＆カテゴリ内訳</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">月〜日の学習時間（分）と7時間（420分）ラインに対する進捗</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="weeklyPercentBadge" class="px-2.5 py-1 rounded-lg bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-bold">
+                0% 達成
+              </span>
+              <button id="clearLogsBtn" type="button" class="text-xs text-rose-500 hover:underline">今週ログ初期化</button>
+            </div>
+          </div>
+
+          <div class="w-full rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 p-3">
+            <svg id="weeklyProgressSvg" viewBox="0 0 640 210" class="w-full h-auto overflow-visible" role="img" aria-label="週間学習時間グラフ"></svg>
+          </div>
+
+          <div id="categoryBreakdownGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs"></div>
+
+          <div class="space-y-1.5">
+            <div class="text-xs font-bold text-slate-500 dark:text-slate-400">直近の学習ログ</div>
+            <div id="recentLogsList" class="max-h-36 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 text-xs"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Year-End 3-Day Sprint -->
+      <div class="bg-gradient-to-r from-indigo-950 via-slate-900 to-violet-950 text-white rounded-2xl p-5 sm:p-6 border border-indigo-500/30 shadow-md space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span class="inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 mb-1">
+              Year-End Sprint (3 Days)
+            </span>
+            <h2 class="text-lg sm:text-xl font-extrabold">🎄 年末3日間短期集中ブースト（『公式TOEIC問題集 10 &amp; 11』）</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-0.5">
+              新しい問題集は増やさず、本番形式の通し演習・時間配分・弱点分類を3日間で一気に固めます。
+            </p>
+          </div>
+          <button id="loadSprintToLogBtn" type="button" class="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold transition">
+            スプリント完了ログを記録（+180分）
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4 space-y-1.5">
+            <div class="text-xs font-bold text-amber-300">Day 1（約2.5〜3h）：現状把握＆通し演習</div>
+            <div class="text-sm font-bold">『公式TOEIC問題集 10』Test 1（2時間通し）</div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              時間を厳密に測って解答。失点原因を「語彙不足」「音の変化」「時間切れ」「ケアレスミス」の4つに仕分けします。
+            </p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4 space-y-1.5">
+            <div class="text-xs font-bold text-cyan-300">Day 2（約2.5h）：精読・精聴＆シャドーイング</div>
+            <div class="text-sm font-bold">Test 1 誤答・迷い問の完全分析</div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Part 3/4/7の根拠箇所を特定し、スクリプトを見ずに言えるまでシャドーイング。知らない単語は3万語バンクやメモへ。
+            </p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4 space-y-1.5">
+            <div class="text-xs font-bold text-emerald-300">Day 3（約2.5〜3h）：タイムマネジメント固定</div>
+            <div class="text-sm font-bold">『公式TOEIC問題集 10』Test 2 ＆『11』準備</div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Part 5を7分以内、Part 7に60分残すペース配分でTest 2を実施。年明け第1週から『公式問題集 11』へスムーズに接続。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 48-Week Curriculum -->
+      <div class="bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold">🗓️ 48週間（12ヶ月）カリキュラム</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              1〜24週：TOEIC 950（『公式10・11』）｜25〜48週：TOEFL iBT（『Official Guide 8th』・『英単語3800』）｜プログラミング①/②＆スペイン語初級と並行
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button type="button" data-week-phase="all" class="week-phase-btn px-3 py-1.5 rounded-xl text-xs font-bold transition">全48週</button>
+            <button type="button" data-week-phase="toeic" class="week-phase-btn px-3 py-1.5 rounded-xl text-xs font-bold transition">W1–24 TOEIC</button>
+            <button type="button" data-week-phase="toefl" class="week-phase-btn px-3 py-1.5 rounded-xl text-xs font-bold transition">W25–48 TOEFL</button>
+            <button type="button" data-week-phase="spanish" class="week-phase-btn px-3 py-1.5 rounded-xl text-xs font-bold transition">スペイン語並行期</button>
+          </div>
+        </div>
+
+        <div id="curriculumWeeksGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 2: 30,000-WORD VOCABULARY, MEMORY TEST & FORGETTING CURVE       -->
+    <!-- ===================================================================== -->
+    <section id="tab-vocab30k" class="tab-panel hidden space-y-6">
+      <!-- Memory & Forgetting Curve Summary Strip -->
+      <div class="bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold">📚 30,000語バンク・単語テスト＆忘却曲線（SRS）システム</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              「覚えた / 覚えてない」の記録と経過時間による記憶定着率（R = e^(-t/S)）の自然減衰を計算。定着率が下がったり復習期限を過ぎた単語が自動で「要復習」に浮上します。
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="openVocabTestBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold transition">
+              🧠 単語テストを開始
+            </button>
+            <button id="toggleAddWordBtn" type="button" class="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs sm:text-sm font-bold transition">
+              ＋ 単語・熟語を追加
+            </button>
+          </div>
+        </div>
+
+        <!-- Memory Metrics Row -->
+        <div id="memoryMetricsGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs"></div>
+
+        <!-- Time-Decay Simulation Helper (optional test of elapsed time decay) -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs">
+          <div class="text-slate-500 dark:text-slate-400">
+            忘却曲線モデル：記憶安定度（日）は「覚えた」連続回数で伸び、「覚えてない」でリセットされます。経過時間に応じて定着率が減衰します。
+          </div>
+          <div class="flex items-center gap-2">
+            <label for="decaySimHoursSelect" class="font-semibold text-slate-600 dark:text-slate-300">経過時間シミュレーション:</label>
+            <select id="decaySimHoursSelect" class="rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1 text-xs font-mono font-semibold">
+              <option value="0" selected>現在時刻（リアル経過時間）</option>
+              <option value="24">+24時間経過想定</option>
+              <option value="72">+3日経過想定</option>
+              <option value="168">+7日経過想定</option>
+              <option value="336">+14日経過想定</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Interactive Vocabulary Test Runner (Hidden until started) -->
+        <div id="vocabTestRunner" class="hidden rounded-2xl bg-indigo-500/10 border border-indigo-500/30 p-4 sm:p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-xs font-extrabold">単語テスト実行中</span>
+              <span id="vocabTestProgressBadge" class="text-xs font-mono font-bold">1 / 10</span>
+            </div>
+            <button id="closeVocabTestBtn" type="button" class="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:underline">
+              テスト終了
+            </button>
+          </div>
+
+          <div class="rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-4 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span id="vtestDepthBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">Lv.3</span>
+              <span id="vtestRetentionBadge" class="text-xs font-mono text-slate-500">推定定着率: --%</span>
+            </div>
+            <div class="flex items-center gap-2.5 pt-1">
+              <div id="vtestTerm" class="text-xl sm:text-2xl font-black tracking-tight"></div>
+              <button id="vtestSpeakBtn" type="button" class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold">🔊</button>
+            </div>
+            <p id="vtestExample" class="text-xs sm:text-sm italic text-slate-600 dark:text-slate-300"></p>
+
+            <div id="vtestAnswerReveal" class="hidden pt-3 mt-2 border-t border-slate-200 dark:border-slate-800 space-y-1">
+              <div class="text-xs font-bold text-slate-400">日本語訳・解説</div>
+              <div id="vtestMeaning" class="text-base sm:text-lg font-extrabold text-indigo-600 dark:text-indigo-400"></div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2.5">
+            <button id="vtestRevealBtn" type="button" class="px-4 py-2 rounded-xl bg-slate-800 dark:bg-slate-700 hover:opacity-90 text-white text-xs sm:text-sm font-bold transition">
+              👁️ 意味を確認する
+            </button>
+            <button id="vtestMarkRememberedBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold transition">
+              ✓ 覚えた（記憶安定度UP）
+            </button>
+            <button id="vtestMarkForgotBtn" type="button" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold transition">
+              ✕ 覚えてない（再復習へ）
+            </button>
+          </div>
+        </div>
+
+        <!-- Custom Word Form -->
+        <form id="addCustomWordForm" class="hidden rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 p-4 space-y-3">
+          <div class="text-xs font-bold text-indigo-600 dark:text-indigo-400">マイ単語・熟語を追加（30,000語バンクに保存）</div>
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-2">
+            <input id="customWordTerm" type="text" required placeholder="英単語 / 熟語" class="rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 px-3 py-2 text-xs" />
+            <input id="customWordMeaning" type="text" required placeholder="日本語訳" class="rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 px-3 py-2 text-xs" />
+            <select id="customWordDepth" class="rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 px-2.5 py-2 text-xs">
+              <option value="1">Lv.1 未就学児〜基礎</option>
+              <option value="2">Lv.2 日常・小学生</option>
+              <option value="3" selected>Lv.3 TOEIC/一般会話</option>
+              <option value="4">Lv.4 TOEFL/上級語彙</option>
+              <option value="5">Lv.5 学術・稀少文書</option>
+            </select>
+            <select id="customWordType" class="rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 px-2.5 py-2 text-xs">
+              <option value="word">単語</option>
+              <option value="idiom">熟語</option>
+              <option value="collocation">コロケーション</option>
+            </select>
+            <button type="submit" class="rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-2">
+              登録する
+            </button>
+          </div>
+          <input id="customWordExample" type="text" placeholder="例文（任意）" class="w-full rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 px-3 py-2 text-xs" />
+        </form>
+      </div>
+
+      <!-- Depth & Memory State Filters -->
+      <div class="bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm space-y-3.5">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+          <button type="button" data-depth="0" class="depth-filter-btn p-2.5 rounded-xl border text-left transition">
+            <div class="text-xs font-extrabold">ALL（全レベル）</div>
+            <div class="text-[11px] opacity-75">#1 – #30,000</div>
+          </button>
+          <button type="button" data-depth="1" class="depth-filter-btn p-2.5 rounded-xl border text-left transition">
+            <div class="text-xs font-extrabold">Lv.1 未就学児〜基礎</div>
+            <div class="text-[11px] opacity-75">#1 – #1,500</div>
+          </button>
+          <button type="button" data-depth="2" class="depth-filter-btn p-2.5 rounded-xl border text-left transition">
+            <div class="text-xs font-extrabold">Lv.2 日常・小学生</div>
+            <div class="text-[11px] opacity-75">#1,501 – #4,500</div>
+          </button>
+          <button type="button" data-depth="3" class="depth-filter-btn p-2.5 rounded-xl border text-left transition">
+            <div class="text-xs font-extrabold">Lv.3 TOEIC/一般会話</div>
+            <div class="text-[11px] opacity-75">#4,501 – #10,000</div>
+          </button>
+          <button type="button" data-depth="4" class="depth-filter-btn p-2.5 rounded-xl border text-left transition">
+            <div class="text-xs font-extrabold">Lv.4 TOEFL/上級語彙</div>
+            <div class="text-[11px] opacity-75">#10,001 – #20,000</div>
+          </button>
+          <button type="button" data-depth="5" class="depth-filter-btn p-2.5 rounded-xl border text-left transition">
+            <div class="text-xs font-extrabold">Lv.5 学術・稀少文書</div>
+            <div class="text-[11px] opacity-75">#20,001 – #30,000</div>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
+          <input id="vocabSearchInput" type="search" placeholder="英単語・熟語・日本語・例文を検索..." class="sm:col-span-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-3.5 py-2 text-xs sm:text-sm" />
+          <select id="vocabMemoryFilter" class="rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs sm:text-sm font-semibold">
+            <option value="all">記憶状態: すべて</option>
+            <option value="due">要復習（忘却・定着率低下）</option>
+            <option value="remembered">覚えた（高定着）</option>
+            <option value="forgot">覚えてない（未定着）</option>
+            <option value="untested">未テスト</option>
+          </select>
+          <select id="vocabTypeFilter" class="rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs sm:text-sm">
+            <option value="all">全種別（単語＋熟語）</option>
+            <option value="word">単語（Words）</option>
+            <option value="idiom">熟語・イディオム</option>
+            <option value="collocation">コロケーション</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Vocab Pagination & Cards -->
+      <div class="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+        <div id="vocabStatsText" class="font-semibold text-slate-600 dark:text-slate-300">表示中: 0語</div>
+        <div class="flex items-center gap-2">
+          <button id="vocabPrevPageBtn" type="button" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-semibold disabled:opacity-40">← 前へ</button>
+          <span id="vocabPageLabel" class="font-mono text-xs px-2">1 / 1</span>
+          <button id="vocabNextPageBtn" type="button" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-semibold disabled:opacity-40">次へ →</button>
+        </div>
+      </div>
+
+      <div id="vocabCardsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5"></div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 3: 100-QUESTION BANKS FOR ALL 7 CATEGORIES (700 ITEMS)            -->
+    <!-- ===================================================================== -->
+    <section id="tab-bank100" class="tab-panel hidden space-y-6">
+      <div class="bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold">📝 全7分野×100問 インタラクティブ問題バンク（計700問）</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              TOEIC 950・TOEFL iBT・熟語/コロケーション・Speaking/Writingに加え、リスニング100問・長文読解100問・ライティング100問をすべて100問ずつ実装。
+            </p>
+          </div>
+          <div id="bankOverallStats" class="px-3.5 py-2 rounded-xl bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 text-xs sm:text-sm font-mono font-bold">
+            全体正答: 0 / 0 (0%)・完了: 0/700
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-2">
+          <button type="button" data-cat="toeic" class="bank-cat-btn p-3 rounded-xl border text-left transition">
+            <div class="text-[11px] font-extrabold text-blue-600 dark:text-blue-400">TOEIC 950</div>
+            <div class="text-sm font-black mt-0.5">100問</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">Part 5/6/7・実務</div>
+          </button>
+          <button type="button" data-cat="toefl" class="bank-cat-btn p-3 rounded-xl border text-left transition">
+            <div class="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400">TOEFL iBT</div>
+            <div class="text-sm font-black mt-0.5">100問</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">学術読解・語彙・講義</div>
+          </button>
+          <button type="button" data-cat="idioms" class="bank-cat-btn p-3 rounded-xl border text-left transition">
+            <div class="text-[11px] font-extrabold text-amber-600 dark:text-amber-400">熟語＆表現</div>
+            <div class="text-sm font-black mt-0.5">100問</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">句動詞・連語</div>
+          </button>
+          <button type="button" data-cat="speaking" class="bank-cat-btn p-3 rounded-xl border text-left transition">
+            <div class="text-[11px] font-extrabold text-purple-600 dark:text-purple-400">スピーキング</div>
+            <div class="text-sm font-black mt-0.5">100問</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">発話45秒・音声入力</div>
+          </button>
+          <button type="button" data-cat="listening" class="bank-cat-btn p-3 rounded-xl border text-left transition">
+            <div class="text-[11px] font-extrabold text-cyan-600 dark:text-cyan-400">🎧 リスニング</div>
+            <div class="text-sm font-black mt-0.5">100問</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">音声再生・速度・聴解</div>
+          </button>
+          <button type="button" data-cat="reading" class="bank-cat-btn p-3 rounded-xl border text-left transition">
+            <div class="text-[11px] font-extrabold text-teal-600 dark:text-teal-400">📖 長文読解</div>
+            <div class="text-sm font-black mt-0.5">100問</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">長文100題・WPM計測</div>
+          </button>
+          <button type="button" data-cat="writing" class="bank-cat-btn p-3 rounded-xl border text-left transition">
+            <div class="text-[11px] font-extrabold text-fuchsia-600 dark:text-fuchsia-400">✍️ ライティング</div>
+            <div class="text-sm font-black mt-0.5">100問</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">作文100題・保存＆AI</div>
+          </button>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
+          <div id="bankBatchBar" class="flex flex-wrap gap-1.5"></div>
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="bankTopicSelect" aria-label="トピック絞り込み" class="rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 text-xs font-semibold">
+              <option value="all">全トピック</option>
+              <option value="business">ビジネス・実務</option>
+              <option value="academic">学術・科学・講義</option>
+              <option value="daily">日常・社会・議論</option>
+            </select>
+            <select id="bankPlaybackRate" aria-label="音声再生速度" class="rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 text-xs font-semibold">
+              <option value="0.8">速度 0.8x</option>
+              <option value="1.0" selected>速度 1.0x</option>
+              <option value="1.2">速度 1.2x</option>
+              <option value="1.45">速度 1.45x</option>
+            </select>
+            <span id="bankCategoryProgress" class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">完了: 0/100</span>
+            <button id="resetBankProgressBtn" type="button" class="text-xs text-rose-500 hover:underline">進捗リセット</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="bankItemsContainer" class="space-y-4"></div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 4: GEMINI AI TUTOR & SPEAKING / CONVERSATION STUDIO             -->
+    <!-- ===================================================================== -->
+    <section id="tab-tutor" class="tab-panel hidden space-y-6">
+      <div class="bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold">🤖 Gemini AIチューター＆スピーキング／英会話スタジオ</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              モデル: <code class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-indigo-600 dark:text-indigo-400">models/gemini-3.8-flash</code> ／ マイク音声入力（SpeechRecognition）＆ 英語音声読み上げ（speechSynthesis）対応
+            </p>
+          </div>
+          <span id="tutorModelStatus" class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+            models/gemini-3.8-flash
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2.5 items-end">
+          <div class="md:col-span-6">
+            <label for="geminiApiKeyInput" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">
+              Gemini API Key（ブラウザの localStorage に保存されます）
+            </label>
+            <input id="geminiApiKeyInput" type="password" autocomplete="off" placeholder="AIza... （Google AI Studio で取得した有効な API キーを入力）" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-3.5 py-2 text-xs sm:text-sm font-mono" />
+          </div>
+          <div class="md:col-span-3">
+            <label for="tutorModeSelect" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">チューターモード</label>
+            <select id="tutorModeSelect" class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs sm:text-sm font-semibold">
+              <option value="general_coach">総合コーチ（TOEIC950 / TOEFL / 週7h）</option>
+              <option value="conversation_partner">英会話パートナー（自然な英語で会話）</option>
+              <option value="speaking_grader">スピーキング添削（文法・流暢さ・構成）</option>
+              <option value="essay_grader">ライティング添削（修正案＋高得点表現）</option>
+              <option value="vocab_deep_dive">3万語ディープ解説（語源・Lv1〜5・例文）</option>
+            </select>
+          </div>
+          <div class="md:col-span-3 flex gap-2">
+            <button id="saveApiKeyBtn" type="button" class="flex-1 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold px-3 py-2 transition">
+              キーを保存
+            </button>
+            <button id="clearApiKeyBtn" type="button" class="rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold px-3 py-2 transition">
+              削除
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div class="lg:col-span-4 bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm space-y-4">
+          <h3 class="text-sm sm:text-base font-bold">🎙️ スピーキング＆音声会話コントロール</h3>
+
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-semibold text-slate-500 dark:text-slate-400">AI音声の自動読み上げ</span>
+              <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                <input id="autoSpeakReplyCheckbox" type="checkbox" checked class="rounded text-indigo-600" />
+                <span class="font-semibold">ON</span>
+              </label>
+            </div>
+            <div class="flex items-center justify-between gap-2 text-xs">
+              <span class="font-semibold text-slate-500 dark:text-slate-400">音声認識言語</span>
+              <select id="speechLangSelect" class="rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-2.5 py-1 text-xs font-semibold">
+                <option value="en-US" selected>English (US)</option>
+                <option value="en-GB">English (UK)</option>
+                <option value="ja-JP">日本語</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 p-3.5 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span id="micStatusLabel" class="text-xs font-bold text-slate-600 dark:text-slate-300">マイク待機中</span>
+              <span id="speakingTimerBadge" class="text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400">00s</span>
+            </div>
+            <textarea id="spokenTranscriptBox" rows="3" placeholder="マイクボタンを押して英語で話すか、ここへ発話テキストを入力してください..." class="w-full rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 p-2.5 text-xs sm:text-sm"></textarea>
+            <div class="flex flex-wrap gap-2">
+              <button id="toggleMicBtn" type="button" class="flex-1 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold py-2 px-3 transition">
+                🎤 音声入力開始
+              </button>
+              <button id="sendSpokenBtn" type="button" class="flex-1 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 px-3 transition">
+                送信＆AI応答
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="text-xs font-bold text-slate-500 dark:text-slate-400">ワンクリック相談プロンプト</div>
+            <button type="button" data-quick-prompt="週7時間の勉強時間で、TOEIC 950点（前半6ヶ月）とTOEFL iBT（後半6ヶ月）をプログラミング課題とスペイン語初級と両立する今週の最適アクションを教えてください。" class="quick-prompt-btn w-full text-left p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-500/10 border border-slate-200 dark:border-slate-800 text-xs transition">
+              📅 今週の週7時間アクションを相談
+            </button>
+            <button type="button" data-quick-prompt="Let's have a 3-minute English conversation about remote work productivity and time management. Ask me one question at a time and give brief feedback on my phrasing." class="quick-prompt-btn w-full text-left p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-500/10 border border-slate-200 dark:border-slate-800 text-xs transition">
+              💬 英語でフリートークを始める
+            </button>
+            <button type="button" data-quick-prompt="Explain the difference between 'mitigate', 'alleviate', and 'exacerbate' across depth levels, with TOEFL/business examples and Japanese translations." class="quick-prompt-btn w-full text-left p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-500/10 border border-slate-200 dark:border-slate-800 text-xs transition">
+              🔬 学術語彙（mitigate / alleviate / exacerbate）の解説
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-8 bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm flex flex-col justify-between space-y-4 min-h-[480px]">
+          <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div class="text-xs sm:text-sm font-bold">チャット履歴（Gemini <span class="font-mono text-indigo-600 dark:text-indigo-400">models/gemini-3.8-flash</span>）</div>
+            <button id="clearChatBtn" type="button" class="text-xs text-slate-500 hover:text-rose-500 font-semibold">履歴クリア</button>
+          </div>
+
+          <div id="tutorChatMessages" class="flex-1 max-h-[390px] overflow-y-auto space-y-3 pr-1"></div>
+
+          <form id="tutorChatForm" class="pt-2 border-t border-slate-200 dark:border-slate-800 flex gap-2">
+            <input id="tutorChatInput" type="text" required placeholder="質問・英作文・スピーキング原稿を入力して Gemini に相談..." class="flex-1 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-3.5 py-2.5 text-xs sm:text-sm" />
+            <button id="tutorSendBtn" type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold transition shrink-0">
+              送信
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const STORAGE = {
+        THEME: "en_hub_theme_v1",
+        LOGS: "en_hub_logs_v1",
+        BANK: "en_hub_bank_v1",
+        CUSTOM_WORDS: "en_hub_custom_words_v1",
+        WORD_MEMORY: "en_hub_word_memory_v1",
+        API_KEY: "en_hub_gemini_api_key_v1",
+        CHAT: "en_hub_gemini_chat_v1"
+      };
+
+      const GEMINI_MODEL = "models/gemini-3.8-flash";
+      const WEEKLY_TARGET_MINUTES = 420;
+      const RETENTION_THRESHOLD = 0.72; // Below 72% retention triggers due review
+
+      let toastTimer = null;
+      function showToast(message, tone = "info") {
+        const banner = document.getElementById("toastBanner");
+        const msgEl = document.getElementById("toastMessage");
+        if (!banner || !msgEl) return;
+
+        banner.classList.remove("hidden", "border-rose-400/60", "border-emerald-400/60", "border-indigo-400/40");
+        if (tone === "error") banner.classList.add("border-rose-400/60");
+        else if (tone === "success") banner.classList.add("border-emerald-400/60");
+        else banner.classList.add("border-indigo-400/40");
+
+        msgEl.textContent = message;
+        banner.classList.remove("hidden");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          banner.classList.add("hidden");
+        }, 3600);
+      }
+
+      document.getElementById("toastCloseBtn")?.addEventListener("click", () => {
+        document.getElementById("toastBanner")?.classList.add("hidden");
+      });
+
+      function escapeHtml(str) {
+        return String(str ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function escapeAttr(str) {
+        return escapeHtml(str).replace(/`/g, "&#96;");
+      }
+
+      function initTheme() {
+        const saved = localStorage.getItem(STORAGE.THEME);
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDark = saved ? saved === "dark" : prefersDark;
+        document.documentElement.classList.toggle("dark", isDark);
+      }
+
+      document.getElementById("themeToggleBtn")?.addEventListener("click", () => {
+        const nextDark = !document.documentElement.classList.contains("dark");
+        document.documentElement.classList.toggle("dark", nextDark);
+        localStorage.setItem(STORAGE.THEME, nextDark ? "dark" : "light");
+        renderWeeklyChart();
+      });
+
+      function stopSpeech() {
+        if ("speechSynthesis" in window) {
+          try {
+            window.speechSynthesis.cancel();
+          } catch (_) {}
+        }
+      }
+
+      function speakEnglish(text, rate = 1.0, lang = "en-US") {
+        if (!("speechSynthesis" in window)) {
+          showToast("お使いのブラウザは音声読み上げ（speechSynthesis）に対応していません。", "info");
+          return;
+        }
+        stopSpeech();
+        const utter = new SpeechSynthesisUtterance(String(text || ""));
+        utter.lang = lang;
+        utter.rate = Math.min(2.0, Math.max(0.5, Number(rate) || 1.0));
+        const voices = window.speechSynthesis.getVoices();
+        const matched = voices.find((v) => v.lang && v.lang.toLowerCase().startsWith(lang.slice(0, 2).toLowerCase()));
+        if (matched) utter.voice = matched;
+        window.speechSynthesis.speak(utter);
+      }
+
+      let activeMainTab = "curriculum";
+      function switchTab(tabName) {
+        activeMainTab = tabName;
+        stopSpeech();
+        document.querySelectorAll(".tab-panel").forEach((panel) => {
+          panel.classList.toggle("hidden", panel.id !== `tab-${tabName}`);
+        });
+        document.querySelectorAll(".main-tab-btn").forEach((btn) => {
+          const isActive = btn.dataset.tab === tabName;
+          btn.className = isActive
+            ? "main-tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white shadow-sm transition"
+            : "main-tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition";
+        });
+        if (tabName === "curriculum") renderWeeklyChart();
+        if (tabName === "vocab30k") renderVocabSection();
+        if (tabName === "bank100") renderBankSection();
+      }
+
+      document.querySelectorAll(".main-tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+      });
+
+      // =====================================================================
+      // 1. CURRICULUM, WEEKLY 7-HOUR TIMER & LOGS
+      // =====================================================================
+      function getStudyLogs() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(STORAGE.LOGS) || "[]");
+          return Array.isArray(raw) ? raw : [];
+        } catch (_) {
+          return [];
+        }
+      }
+
+      function saveStudyLogs(logs) {
+        localStorage.setItem(STORAGE.LOGS, JSON.stringify(logs.slice(0, 200)));
+      }
+
+      function getStartOfWeekMonday() {
+        const now = new Date();
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const day = d.getDay();
+        const diff = day === 0 ? -6 : 1 - day;
+        d.setDate(d.getDate() + diff);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime();
+      }
+
+      function addStudyLog(category, minutes, memo = "") {
+        const mins = Math.max(1, Math.round(Number(minutes) || 0));
+        const logs = getStudyLogs();
+        const now = new Date();
+        logs.unshift({
+          id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          category,
+          minutes: mins,
+          memo: memo.trim() || `${category} 学習セッション`,
+          ts: now.getTime(),
+          dayIndex: (now.getDay() + 6) % 7
+        });
+        saveStudyLogs(logs);
+        renderTimeAndLogs();
+        showToast(`${category} に +${mins}分 を記録しました。`, "success");
+      }
+
+      let timerInterval = null;
+      let timerRunning = false;
+      let elapsedSeconds = 0;
+
+      function formatClock(totalSecs) {
+        const s = Math.max(0, Math.floor(totalSecs));
+        const hrs = String(Math.floor(s / 3600)).padStart(2, "0");
+        const mins = String(Math.floor((s % 3600) / 60)).padStart(2, "0");
+        const secs = String(s % 60).padStart(2, "0");
+        return `${hrs}:${mins}:${secs}`;
+      }
+
+      function getCountdownTargetSeconds() {
+        const mode = document.getElementById("timerModeSelect")?.value || "stopwatch";
+        if (mode === "countdown25") return 25 * 60;
+        if (mode === "countdown40") return 40 * 60;
+        if (mode === "countdown120") return 120 * 60;
+        return 0;
+      }
+
+      function updateTimerDisplay() {
+        const mode = document.getElementById("timerModeSelect")?.value || "stopwatch";
+        const clockEl = document.getElementById("timerClockDisplay");
+        const statusEl = document.getElementById("timerStatusLabel");
+        const btnEl = document.getElementById("timerStartPauseBtn");
+        if (!clockEl || !statusEl || !btnEl) return;
+
+        if (mode === "stopwatch") {
+          clockEl.textContent = formatClock(elapsedSeconds);
+        } else {
+          const target = getCountdownTargetSeconds();
+          clockEl.textContent = formatClock(Math.max(0, target - elapsedSeconds));
+        }
+
+        btnEl.textContent = timerRunning ? "⏸ 一時停止" : "▶ 開始";
+        statusEl.textContent = timerRunning ? "計測中..." : elapsedSeconds > 0 ? "一時停止中" : "待機中 — スタートを押して計測開始";
+      }
+
+      function pauseTimer() {
+        timerRunning = false;
+        clearInterval(timerInterval);
+        timerInterval = null;
+        updateTimerDisplay();
+      }
+
+      document.getElementById("timerStartPauseBtn")?.addEventListener("click", () => {
+        if (timerRunning) {
+          pauseTimer();
+          return;
+        }
+        timerRunning = true;
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+          elapsedSeconds += 1;
+          const mode = document.getElementById("timerModeSelect")?.value || "stopwatch";
+          if (mode !== "stopwatch") {
+            const target = getCountdownTargetSeconds();
+            if (elapsedSeconds >= target) {
+              elapsedSeconds = target;
+              pauseTimer();
+              showToast("設定時間が終了しました！「記録してリセット」で学習ログに追加できます。", "success");
+            }
+          }
+          updateTimerDisplay();
+        }, 1000);
+      });
+
+      document.getElementById("timerLogAndResetBtn")?.addEventListener("click", () => {
+        pauseTimer();
+        const mins = Math.max(1, Math.round(elapsedSeconds / 60));
+        const cat = document.getElementById("timerCategorySelect")?.value || "TOEIC";
+        elapsedSeconds = 0;
+        updateTimerDisplay();
+        addStudyLog(cat, mins, "タイマー計測セッション");
+      });
+
+      document.getElementById("timerDiscardBtn")?.addEventListener("click", () => {
+        pauseTimer();
+        elapsedSeconds = 0;
+        updateTimerDisplay();
+      });
+
+      document.getElementById("timerModeSelect")?.addEventListener("change", () => {
+        pauseTimer();
+        elapsedSeconds = 0;
+        updateTimerDisplay();
+      });
+
+      document.getElementById("manualLogForm")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const cat = document.getElementById("manualCategorySelect")?.value || "TOEIC";
+        const mins = Number(document.getElementById("manualMinutesInput")?.value || 0);
+        const memo = document.getElementById("manualMemoInput")?.value || "";
+        if (!mins || mins < 1) {
+          showToast("1分以上の数値を入力してください。", "error");
+          return;
+        }
+        addStudyLog(cat, mins, memo);
+        document.getElementById("manualMemoInput").value = "";
+      });
+
+      document.getElementById("clearLogsBtn")?.addEventListener("click", () => {
+        saveStudyLogs([]);
+        renderTimeAndLogs();
+        showToast("今週の学習ログを初期化しました。", "info");
+      });
+
+      document.getElementById("loadSprintToLogBtn")?.addEventListener("click", () => {
+        addStudyLog("TOEIC", 180, "年末3日間ブースト（公式問題集10 Test1 & Test2）");
+      });
+
+      function renderWeeklyChart() {
+        const svg = document.getElementById("weeklyProgressSvg");
+        if (!svg) return;
+        const weekStart = getStartOfWeekMonday();
+        const weekLogs = getStudyLogs().filter((l) => Number(l.ts) >= weekStart);
+        const dayMinutes = [0, 0, 0, 0, 0, 0, 0];
+        weekLogs.forEach((l) => {
+          const idx = Math.min(6, Math.max(0, Number(l.dayIndex) || 0));
+          dayMinutes[idx] += Number(l.minutes) || 0;
+        });
+
+        const isDark = document.documentElement.classList.contains("dark");
+        const gridColor = isDark ? "#1e293b" : "#e2e8f0";
+        const labelColor = isDark ? "#94a3b8" : "#475569";
+        const days = ["月", "火", "水", "木", "金", "土", "日"];
+        const maxVal = Math.max(90, ...dayMinutes);
+
+        const chartLeft = 42;
+        const chartRight = 615;
+        const chartTop = 24;
+        const chartBottom = 172;
+        const chartW = chartRight - chartLeft;
+        const chartH = chartBottom - chartTop;
+
+        let markup = `
+          <line x1="${chartLeft}" y1="${chartTop}" x2="${chartRight}" y2="${chartTop}" stroke="${gridColor}" stroke-dasharray="4 4" />
+          <line x1="${chartLeft}" y1="${chartBottom}" x2="${chartRight}" y2="${chartBottom}" stroke="${gridColor}" />
+          <text x="${chartLeft - 8}" y="${chartTop + 4}" text-anchor="end" fill="${labelColor}" font-size="11" font-family="monospace">${maxVal}m</text>
+          <text x="${chartLeft - 8}" y="${chartBottom + 4}" text-anchor="end" fill="${labelColor}" font-size="11" font-family="monospace">0</text>
+        `;
+
+        const slotW = chartW / days.length;
+        const barW = Math.min(44, slotW * 0.56);
+
+        days.forEach((label, i) => {
+          const mins = dayMinutes[i];
+          const barH = Math.round((mins / maxVal) * chartH);
+          const x = chartLeft + i * slotW + (slotW - barW) / 2;
+          const y = chartBottom - barH;
+          markup += `
+            <rect x="${x}" y="${y}" width="${barW}" height="${barH}" rx="7" fill="#4f46e5" opacity="${mins > 0 ? "0.92" : "0.2"}" />
+            <text x="${x + barW / 2}" y="${chartBottom + 18}" text-anchor="middle" fill="${labelColor}" font-size="12" font-weight="bold">${label}</text>
+            <text x="${x + barW / 2}" y="${Math.max(chartTop + 12, y - 6)}" text-anchor="middle" fill="${labelColor}" font-size="11" font-family="monospace">${mins > 0 ? mins + "m" : ""}</text>
+          `;
+        });
+
+        svg.innerHTML = markup;
+      }
+
+      function renderTimeAndLogs() {
+        const weekStart = getStartOfWeekMonday();
+        const logs = getStudyLogs();
+        const weekLogs = logs.filter((l) => Number(l.ts) >= weekStart);
+        const totalMins = weekLogs.reduce((acc, item) => acc + (Number(item.minutes) || 0), 0);
+        const hoursStr = (totalMins / 60).toFixed(1);
+        const pct = Math.min(100, Math.round((totalMins / WEEKLY_TARGET_MINUTES) * 100));
+
+        const badge = document.getElementById("headerWeeklyBadge");
+        if (badge) badge.textContent = `今週: ${hoursStr}h / 7.0h (${totalMins}/${WEEKLY_TARGET_MINUTES}m)`;
+
+        const pctBadge = document.getElementById("weeklyPercentBadge");
+        if (pctBadge) pctBadge.textContent = `${pct}% 達成（${totalMins} / ${WEEKLY_TARGET_MINUTES}分）`;
+
+        const cats = ["TOEIC", "TOEFL", "Programming", "Spanish"];
+        const catLabels = {
+          TOEIC: "TOEIC 950",
+          TOEFL: "TOEFL iBT",
+          Programming: "プログラミング",
+          Spanish: "スペイン語"
+        };
+        const breakdownGrid = document.getElementById("categoryBreakdownGrid");
+        if (breakdownGrid) {
+          breakdownGrid.innerHTML = cats
+            .map((c) => {
+              const m = weekLogs.filter((x) => x.category === c).reduce((s, x) => s + (Number(x.minutes) || 0), 0);
+              return `
+                <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 p-2.5">
+                  <div class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">${catLabels[c]}</div>
+                  <div class="text-sm font-mono font-extrabold mt-0.5">${m}分 <span class="text-[11px] font-normal">(${(m / 60).toFixed(1)}h)</span></div>
+                </div>`;
+            })
+            .join("");
+        }
+
+        const recentEl = document.getElementById("recentLogsList");
+        if (recentEl) {
+          if (!weekLogs.length) {
+            recentEl.innerHTML = `<div class="py-3 text-slate-400">今週の記録はまだありません。タイマーまたは手動追加から記録しましょう。</div>`;
+          } else {
+            recentEl.innerHTML = weekLogs
+              .slice(0, 8)
+              .map(
+                (l) => `
+                <div class="py-1.5 flex items-center justify-between gap-2">
+                  <div class="truncate">
+                    <span class="font-bold text-indigo-600 dark:text-indigo-400 mr-1.5">[${escapeHtml(l.category)}]</span>
+                    <span>${escapeHtml(l.memo)}</span>
+                  </div>
+                  <span class="font-mono font-bold shrink-0">+${l.minutes}分</span>
+                </div>`
+              )
+              .join("");
+          }
+        }
+
+        renderWeeklyChart();
+      }
+
+      const FORTY_EIGHT_WEEKS = Array.from({ length: 48 }, (_, idx) => {
+        const w = idx + 1;
+        const month = Math.ceil(w / 4);
+        const isToeic = w <= 24;
+        const hasSpanish = month >= 4 && month <= 7;
+
+        let focus = "";
+        let allocation = "";
+        let action = "";
+
+        if (isToeic) {
+          if (month <= 2) {
+            focus = "『公式問題集 11』Test 1 精読・精聴・音読";
+            allocation = hasSpanish ? "TOEIC 4.0h / プログラミング① 2.0h / 西語 1.0h" : "TOEIC 4.5h / プログラミング① 2.5h";
+            action = "平日25〜30分で文構造と未知語を潰し、週末2時間で通し演習・シャドーイング。";
+          } else if (month <= 4) {
+            focus = "『公式問題集 11』Test 2 ＆ 1.2倍速処理";
+            allocation = hasSpanish ? "TOEIC 4.0h / プログラミング① 2.0h / 西語 1.0h" : "TOEIC 4.5h / プログラミング① 2.5h";
+            action = "Part 7のスラッシュリーディングとリスニング1.2倍速で処理速度を引き上げ。";
+          } else {
+            focus = "『公式問題集 10 & 11』再テスト＆950点仕上げ";
+            allocation = hasSpanish ? "TOEIC 4.0h / プログラミング① 2.0h / 西語 1.0h" : "TOEIC 4.5h / プログラミング① 2.5h";
+            action = "誤答パターンの潰し込みと時間配分（Part 5を7分以内）の安定化。W24前後で本番受験。";
+          }
+        } else {
+          if (month === 7) {
+            focus = "TOEFL 立ち上げ・『英単語3800』＆『Official Guide 8th』";
+            allocation = "TOEFL 5.0h / 西語仕上げ 1.0h / 調整 1.0h";
+            action = "2026年新形式のセクション構成を把握し、学術語彙Rank 1–2を周回。";
+          } else if (month <= 10) {
+            focus = "4技能演習＋Speaking/Writingの型構築";
+            allocation = month <= 10 && month >= 8 ? "TOEFL 4.5h / プログラミング② 2.5h" : "TOEFL 7.0h";
+            action = "『Official Guide 8th』デジタル模試とAIチューターでの発話・作文添削を反復。";
+          } else {
+            focus = "TOEFL 単独集中・通し演習＆本番仕上げ";
+            allocation = "TOEFL 7.0h（1点集中）";
+            action = "弱点セクションの集中補強と時間制限付きアウトプット。W48前後で本番受験。";
+          }
+        }
+
+        return {
+          week: w,
+          month,
+          phase: isToeic ? "toeic" : "toefl",
+          hasSpanish,
+          focus,
+          allocation,
+          action
+        };
+      });
+
+      let activeWeekFilter = "all";
+      function renderWeeksGrid() {
+        document.querySelectorAll(".week-phase-btn").forEach((btn) => {
+          const active = btn.dataset.weekPhase === activeWeekFilter;
+          btn.className = active
+            ? "week-phase-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-600 text-white transition"
+            : "week-phase-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition";
+        });
+
+        const list = FORTY_EIGHT_WEEKS.filter((item) => {
+          if (activeWeekFilter === "toeic") return item.phase === "toeic";
+          if (activeWeekFilter === "toefl") return item.phase === "toefl";
+          if (activeWeekFilter === "spanish") return item.hasSpanish;
+          return true;
+        });
+
+        const grid = document.getElementById("curriculumWeeksGrid");
+        if (!grid) return;
+        grid.innerHTML = list
+          .map((w) => {
+            const badgeCls =
+              w.phase === "toeic"
+                ? "bg-blue-500/15 text-blue-700 dark:text-blue-300"
+                : "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300";
+            return `
+              <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/50 p-4 space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-xs font-mono font-extrabold">Week ${String(w.week).padStart(2, "0")}（${w.month}ヶ月目）</span>
+                  <span class="text-[11px] font-bold px-2 py-0.5 rounded-full ${badgeCls}">${w.phase === "toeic" ? "TOEIC 950" : "TOEFL iBT"}</span>
+                </div>
+                <div class="text-sm font-bold leading-snug">${escapeHtml(w.focus)}</div>
+                <div class="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400">${escapeHtml(w.allocation)}</div>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">${escapeHtml(w.action)}</p>
+              </div>`;
+          })
+          .join("");
+      }
+
+      document.querySelectorAll(".week-phase-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          activeWeekFilter = btn.dataset.weekPhase;
+          renderWeeksGrid();
+        });
+      });
+
+      // =====================================================================
+      // 2. 30,000-WORD VOCABULARY, MEMORY TEST & FORGETTING CURVE (SRS)
+      // =====================================================================
+      const DEPTH_META = {
+        1: { label: "Lv.1 未就学児〜基礎", badge: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" },
+        2: { label: "Lv.2 日常・小学生", badge: "bg-sky-500/15 text-sky-700 dark:text-sky-300" },
+        3: { label: "Lv.3 TOEIC/一般会話", badge: "bg-indigo-500/15 text-indigo-700 dark:text-indigo-300" },
+        4: { label: "Lv.4 TOEFL/上級語彙", badge: "bg-amber-500/15 text-amber-700 dark:text-amber-300" },
+        5: { label: "Lv.5 学術・稀少文書", badge: "bg-rose-500/15 text-rose-700 dark:text-rose-300" }
+      };
+
+      function buildThirtyThousandVocabBank() {
+        const seeds = [
+          { term: "apple", ja: "りんご", depth: 1, type: "word", exam: "Native", rank: 420, ex: "She sliced a crisp apple for breakfast." },
+          { term: "water", ja: "水", depth: 1, type: "word", exam: "Native", rank: 85, ex: "Drink plenty of water during long study sessions." },
+          { term: "go back", ja: "戻る・帰る", depth: 1, type: "idiom", exam: "Native", rank: 310, ex: "Let's go back and check the first slide." },
+          { term: "look at", ja: "〜を見る", depth: 1, type: "idiom", exam: "Native", rank: 140, ex: "Look at the chart on page twelve." },
+          { term: "play", ja: "遊ぶ・演奏する・再生する", depth: 1, type: "word", exam: "Native", rank: 215, ex: "Press play to hear the audio passage." },
+          { term: "help out", ja: "手伝う・助ける", depth: 1, type: "idiom", exam: "Native", rank: 590, ex: "Can you help out with the slides today?" },
+
+          { term: "schedule", ja: "予定・スケジュール", depth: 2, type: "word", exam: "TOEIC", rank: 1720, ex: "We moved the review meeting on the schedule." },
+          { term: "improve", ja: "改善する・上達する", depth: 2, type: "word", exam: "TOEIC", rank: 1890, ex: "Daily shadowing helps improve listening speed." },
+          { term: "figure out", ja: "理解する・解明する", depth: 2, type: "idiom", exam: "Native", rank: 2140, ex: "It took ten minutes to figure out the bug." },
+          { term: "keep track of", ja: "〜を把握する・記録する", depth: 2, type: "idiom", exam: "TOEIC", rank: 2450, ex: "Use the weekly log to keep track of study hours." },
+          { term: "neighbor", ja: "隣人・近所の", depth: 2, type: "word", exam: "Native", rank: 2680, ex: "Our neighbor runs a bakery down the street." },
+          { term: "take notes", ja: "メモを取る", depth: 2, type: "collocation", exam: "TOEFL", rank: 2910, ex: "Take concise notes during academic lectures." },
+
+          { term: "reimburse", ja: "経費を払い戻す・弁済する", depth: 3, type: "word", exam: "TOEIC", rank: 5420, ex: "Employees can submit receipts to be reimbursed." },
+          { term: "feasibility", ja: "実現可能性", depth: 3, type: "word", exam: "TOEIC", rank: 6180, ex: "We evaluated the feasibility of launching in Q2." },
+          { term: "account for", ja: "〜の割合を占める・説明する", depth: 3, type: "idiom", exam: "TOEIC", rank: 5890, ex: "Reading passages account for half of the score." },
+          { term: "drawback", ja: "欠点・短所", depth: 3, type: "word", exam: "TOEIC", rank: 6750, ex: "One drawback of rushing is avoidable errors." },
+          { term: "meet a deadline", ja: "締め切りに間に合わせる", depth: 3, type: "collocation", exam: "TOEIC", rank: 5120, ex: "The team worked steadily to meet the deadline." },
+          { term: "in contrast", ja: "それに対して・対照的に", depth: 3, type: "idiom", exam: "TOEFL", rank: 4980, ex: "In contrast to cramming, spaced review lasts." },
+
+          { term: "mitigate", ja: "緩和する・軽減する", depth: 4, type: "word", exam: "TOEFL", rank: 11840, ex: "Wetlands help mitigate downstream flood risks." },
+          { term: "proliferate", ja: "急増する・増殖する", depth: 4, type: "word", exam: "TOEFL", rank: 13420, ex: "Digital archives have proliferated over two decades." },
+          { term: "corroborate", ja: "裏付ける・確証を与える", depth: 4, type: "word", exam: "TOEFL", rank: 14950, ex: "Independent fossils corroborate the migration model." },
+          { term: "unprecedented", ja: "前例のない", depth: 4, type: "word", exam: "TOEFL", rank: 12310, ex: "The telescope captured data of unprecedented clarity." },
+          { term: "stem from", ja: "〜に起因する・由来する", depth: 4, type: "idiom", exam: "TOEFL", rank: 11290, ex: "Many syntax errors stem from hurried assumptions." },
+          { term: "empirical evidence", ja: "実証的証拠", depth: 4, type: "collocation", exam: "TOEFL", rank: 15600, ex: "The hypothesis requires stronger empirical evidence." },
+
+          { term: "obfuscate", ja: "曖昧にする・分かりにくくする", depth: 5, type: "word", exam: "TOEFL", rank: 22410, ex: "Jargon should clarify rather than obfuscate arguments." },
+          { term: "ephemeral", ja: "短命な・はかない", depth: 5, type: "word", exam: "TOEFL", rank: 23890, ex: "Surface puddles are ephemeral after desert rain." },
+          { term: "recalcitrant", ja: "手におえない・抵抗する", depth: 5, type: "word", exam: "TOEFL", rank: 25740, ex: "Legacy coupling made the module recalcitrant to refactor." },
+          { term: "perspicacious", ja: "洞察力のある・明敏な", depth: 5, type: "word", exam: "TOEFL", rank: 27820, ex: "Her perspicacious critique exposed a hidden flaw." },
+          { term: "verisimilitude", ja: "真実らしさ・迫真性", depth: 5, type: "word", exam: "TOEFL", rank: 28950, ex: "Historical chronicles aim for verisimilitude in detail." },
+          { term: "abstruse", ja: "難解な・奥深い", depth: 5, type: "word", exam: "TOEFL", rank: 24610, ex: "The seminar unpacked an abstruse treatise on logic." }
+        ];
+
+        const bank = [];
+        for (let i = 0; i < 30000; i++) {
+          const seed = seeds[i % seeds.length];
+          const rank = i + 1;
+          let depth = 1;
+          if (rank > 20000) depth = 5;
+          else if (rank > 10000) depth = 4;
+          else if (rank > 4500) depth = 3;
+          else if (rank > 1500) depth = 2;
+
+          const isSeedExact = i < seeds.length;
+          bank.push({
+            id: `w30k-${rank}`,
+            rank,
+            term: isSeedExact ? seed.term : `${seed.term} #${rank}`,
+            ja: isSeedExact ? seed.ja : `${seed.ja}（ランク#${rank}派生・用例）`,
+            depth,
+            type: seed.type,
+            exam: seed.exam,
+            ex: seed.ex
+          });
+        }
+        return bank;
+      }
+
+      const THIRTY_K_BANK = buildThirtyThousandVocabBank();
+
+      function getCustomWords() {
+        try {
+          const arr = JSON.parse(localStorage.getItem(STORAGE.CUSTOM_WORDS) || "[]");
+          return Array.isArray(arr) ? arr : [];
+        } catch (_) {
+          return [];
+        }
+      }
+
+      function saveCustomWords(list) {
+        localStorage.setItem(STORAGE.CUSTOM_WORDS, JSON.stringify(list));
+      }
+
+      // Per-word forgetting curve & test memory records
+      function getWordMemoryMap() {
+        try {
+          const obj = JSON.parse(localStorage.getItem(STORAGE.WORD_MEMORY) || "{}");
+          return obj && typeof obj === "object" ? obj : {};
+        } catch (_) {
+          return {};
+        }
+      }
+
+      function saveWordMemoryMap(map) {
+        localStorage.setItem(STORAGE.WORD_MEMORY, JSON.stringify(map));
+      }
+
+      function getSimulatedNowMs() {
+        const simHours = Number(document.getElementById("decaySimHoursSelect")?.value || 0);
+        return Date.now() + simHours * 3600 * 1000;
+      }
+
+      /**
+       * Computes current retention R in [0, 1] and review status using
+       * an Ebbinghaus exponential decay model: R = exp(-elapsedDays / stabilityDays).
+       */
+      function computeMemoryState(wordId, memoryMap, nowMs = Date.now()) {
+        const rec = memoryMap[wordId];
+        if (!rec || !rec.lastTestedAt) {
+          return {
+            status: "untested",
+            retention: null,
+            stabilityDays: 0,
+            streak: 0,
+            lapses: 0,
+            isDue: false
+          };
+        }
+
+        const stabilityDays = Math.max(0.4, Number(rec.stabilityDays) || 1.0);
+        const elapsedMs = Math.max(0, nowMs - Number(rec.lastTestedAt));
+        const elapsedDays = elapsedMs / (1000 * 60 * 60 * 24);
+        const retention = Math.max(0.05, Math.min(1.0, Math.exp(-elapsedDays / stabilityDays)));
+
+        const lastResult = rec.lastResult || "forgot";
+        const isDue = lastResult === "forgot" || retention < RETENTION_THRESHOLD;
+
+        let status = "remembered";
+        if (isDue) status = "due";
+        else if (lastResult === "forgot") status = "forgot";
+
+        return {
+          status,
+          retention,
+          stabilityDays,
+          streak: Number(rec.streak) || 0,
+          lapses: Number(rec.lapses) || 0,
+          isDue
+        };
+      }
+
+      function recordWordTestResult(wordId, remembered) {
+        const map = getWordMemoryMap();
+        const prev = map[wordId] || { streak: 0, lapses: 0, stabilityDays: 1.0 };
+        let nextStreak = Number(prev.streak) || 0;
+        let nextLapses = Number(prev.lapses) || 0;
+        let nextStability = Number(prev.stabilityDays) || 1.0;
+
+        if (remembered) {
+          nextStreak += 1;
+          // Each successful recall multiplies memory stability (~1.8x, growing up to 30 days)
+          nextStability = Math.min(30, Math.max(1.5, nextStability * 1.85 + 0.5));
+        } else {
+          nextStreak = 0;
+          nextLapses += 1;
+          nextStability = 0.65; // Short decay window so forgotten words return quickly
+        }
+
+        map[wordId] = {
+          lastResult: remembered ? "remembered" : "forgot",
+          lastTestedAt: Date.now(),
+          streak: nextStreak,
+          lapses: nextLapses,
+          stabilityDays: nextStability
+        };
+
+        saveWordMemoryMap(map);
+        renderMemoryMetrics();
+        renderVocabSection();
+      }
+
+      function getAllVocabItems() {
+        const customMapped = getCustomWords().map((cw, idx) => ({
+          id: `custom-${idx}-${cw.term}`,
+          rank: Number(cw.depth) * 4000,
+          term: cw.term,
+          ja: cw.ja,
+          depth: Number(cw.depth) || 3,
+          type: cw.type || "word",
+          exam: "Custom",
+          ex: cw.ex || `Example sentence using "${cw.term}".`
+        }));
+        return [...customMapped, ...THIRTY_K_BANK];
+      }
+
+      function renderMemoryMetrics() {
+        const map = getWordMemoryMap();
+        const nowMs = getSimulatedNowMs();
+        const all = getAllVocabItems();
+
+        let testedCount = 0;
+        let dueCount = 0;
+        let highRetCount = 0;
+        let retSum = 0;
+
+        for (let i = 0; i < all.length; i++) {
+          const st = computeMemoryState(all[i].id, map, nowMs);
+          if (st.status !== "untested") {
+            testedCount += 1;
+            retSum += st.retention;
+            if (st.isDue) dueCount += 1;
+            else if (st.retention >= RETENTION_THRESHOLD) highRetCount += 1;
+          }
+        }
+
+        const avgRetPct = testedCount > 0 ? Math.round((retSum / testedCount) * 100) : 0;
+
+        const headerDue = document.getElementById("headerRetentionBadge");
+        if (headerDue) headerDue.textContent = `要復習: ${dueCount}語`;
+
+        const grid = document.getElementById("memoryMetricsGrid");
+        if (!grid) return;
+        grid.innerHTML = `
+          <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 p-3">
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">テスト記録済み</div>
+            <div class="text-base font-mono font-extrabold mt-0.5">${testedCount.toLocaleString()}語</div>
+          </div>
+          <div class="rounded-xl bg-amber-500/10 border border-amber-500/30 p-3">
+            <div class="text-[11px] text-amber-700 dark:text-amber-300 font-semibold">要復習（忘却・期限到来）</div>
+            <div class="text-base font-mono font-extrabold mt-0.5 text-amber-700 dark:text-amber-300">${dueCount.toLocaleString()}語</div>
+          </div>
+          <div class="rounded-xl bg-emerald-500/10 border border-emerald-500/30 p-3">
+            <div class="text-[11px] text-emerald-700 dark:text-emerald-300 font-semibold">高定着（R ≥ 72%）</div>
+            <div class="text-base font-mono font-extrabold mt-0.5 text-emerald-700 dark:text-emerald-300">${highRetCount.toLocaleString()}語</div>
+          </div>
+          <div class="rounded-xl bg-indigo-500/10 border border-indigo-500/30 p-3">
+            <div class="text-[11px] text-indigo-700 dark:text-indigo-300 font-semibold">平均推定定着率</div>
+            <div class="text-base font-mono font-extrabold mt-0.5 text-indigo-700 dark:text-indigo-300">${avgRetPct}%</div>
+          </div>
+        `;
+      }
+
+      let activeDepth = 0;
+      let vocabPage = 1;
+      const VOCAB_PER_PAGE = 24;
+
+      function getFilteredVocabList() {
+        const q = (document.getElementById("vocabSearchInput")?.value || "").trim().toLowerCase();
+        const memF = document.getElementById("vocabMemoryFilter")?.value || "all";
+        const typeF = document.getElementById("vocabTypeFilter")?.value || "all";
+        const map = getWordMemoryMap();
+        const nowMs = getSimulatedNowMs();
+
+        return getAllVocabItems().filter((item) => {
+          if (activeDepth !== 0 && item.depth !== activeDepth) return false;
+          if (typeF !== "all" && item.type !== typeF) return false;
+          if (q) {
+            const hay = `${item.term} ${item.ja} ${item.ex} #${item.rank}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          if (memF !== "all") {
+            const m = computeMemoryState(item.id, map, nowMs);
+            if (memF === "due" && !m.isDue) return false;
+            if (memF === "remembered" && (m.status === "untested" || m.isDue)) return false;
+            if (memF === "forgot" && (!map[item.id] || map[item.id].lastResult !== "forgot")) return false;
+            if (memF === "untested" && m.status !== "untested") return false;
+          }
+          return true;
+        });
+      }
+
+      function renderVocabSection() {
+        renderMemoryMetrics();
+
+        document.querySelectorAll(".depth-filter-btn").forEach((btn) => {
+          const d = Number(btn.dataset.depth);
+          const active = d === activeDepth;
+          btn.className = active
+            ? "depth-filter-btn p-2.5 rounded-xl border-2 border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/40 text-left transition"
+            : "depth-filter-btn p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/40 text-left hover:border-slate-400 transition";
+        });
+
+        const filtered = getFilteredVocabList();
+        const totalPages = Math.max(1, Math.ceil(filtered.length / VOCAB_PER_PAGE));
+        if (vocabPage > totalPages) vocabPage = totalPages;
+
+        const slice = filtered.slice((vocabPage - 1) * VOCAB_PER_PAGE, vocabPage * VOCAB_PER_PAGE);
+        const statsEl = document.getElementById("vocabStatsText");
+        if (statsEl) {
+          statsEl.textContent = `該当: ${filtered.length.toLocaleString()}件（30,000語バンク基準・ページ ${vocabPage}/${totalPages}）`;
+        }
+        const pageLbl = document.getElementById("vocabPageLabel");
+        if (pageLbl) pageLbl.textContent = `${vocabPage} / ${totalPages}`;
+
+        document.getElementById("vocabPrevPageBtn").disabled = vocabPage <= 1;
+        document.getElementById("vocabNextPageBtn").disabled = vocabPage >= totalPages;
+
+        const map = getWordMemoryMap();
+        const nowMs = getSimulatedNowMs();
+        const grid = document.getElementById("vocabCardsGrid");
+        if (!grid) return;
+
+        if (!slice.length) {
+          grid.innerHTML = `<div class="col-span-full bg-white dark:bg-slatecard rounded-2xl p-8 text-center text-sm text-slate-500 border border-slate-200 dark:border-slateborder">条件に一致する単語・熟語が見つかりませんでした。</div>`;
+          return;
+        }
+
+        grid.innerHTML = slice
+          .map((item) => {
+            const meta = DEPTH_META[item.depth] || DEPTH_META[3];
+            const mem = computeMemoryState(item.id, map, nowMs);
+            let memBadge = `<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-300">未テスト</span>`;
+            if (mem.isDue) {
+              memBadge = `<span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300">要復習 (${Math.round(mem.retention * 100)}%)</span>`;
+            } else if (mem.status === "remembered") {
+              memBadge = `<span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">覚えた (${Math.round(mem.retention * 100)}%)</span>`;
+            }
+
+            return `
+              <div class="bg-white dark:bg-slatecard rounded-2xl p-4 border border-slate-200 dark:border-slateborder shadow-sm flex flex-col justify-between gap-3">
+                <div class="space-y-1.5">
+                  <div class="flex flex-wrap items-center justify-between gap-1.5">
+                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-full ${meta.badge}">${meta.label}</span>
+                    ${memBadge}
+                  </div>
+                  <div class="flex items-baseline justify-between gap-2">
+                    <div class="text-base sm:text-lg font-extrabold tracking-tight">${escapeHtml(item.term)}</div>
+                    <span class="text-[11px] font-mono text-slate-400">#${item.rank.toLocaleString()}</span>
+                  </div>
+                  <div class="text-xs sm:text-sm font-semibold text-indigo-600 dark:text-indigo-400">${escapeHtml(item.ja)}</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 italic">"${escapeHtml(item.ex)}"</p>
+                </div>
+                <div class="flex items-center justify-between gap-1.5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+                  <button type="button" data-speak="${escapeAttr(item.term + ". " + item.ex)}" class="vocab-speak-btn px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/15 font-bold transition">
+                    🔊 発音
+                  </button>
+                  <div class="flex items-center gap-1.5">
+                    <button type="button" data-wid="${escapeAttr(item.id)}" data-rem="1" class="vcard-mark-btn px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-700 dark:text-emerald-300 font-bold transition">
+                      覚えた
+                    </button>
+                    <button type="button" data-wid="${escapeAttr(item.id)}" data-rem="0" class="vcard-mark-btn px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 text-rose-700 dark:text-rose-300 font-bold transition">
+                      覚えてない
+                    </button>
+                  </div>
+                </div>
+              </div>`;
+          })
+          .join("");
+
+        grid.querySelectorAll(".vocab-speak-btn").forEach((b) => {
+          b.addEventListener("click", () => speakEnglish(b.dataset.speak, 1.0, "en-US"));
+        });
+
+        grid.querySelectorAll(".vcard-mark-btn").forEach((b) => {
+          b.addEventListener("click", () => {
+            const ok = b.dataset.rem === "1";
+            recordWordTestResult(b.dataset.wid, ok);
+            showToast(ok ? "「覚えた」を記録し、記憶安定度を更新しました。" : "「覚えてない」を記録し、再復習キューへ追加しました。", ok ? "success" : "info");
+          });
+        });
+      }
+
+      // Interactive Vocabulary Test Queue (Prioritizes due/forgot words first, then filtered items)
+      let testQueue = [];
+      let testIndex = 0;
+
+      function buildTestQueue() {
+        const map = getWordMemoryMap();
+        const nowMs = getSimulatedNowMs();
+        const pool = getFilteredVocabList();
+        const source = pool.length > 0 ? pool : THIRTY_K_BANK.slice(0, 120);
+
+        const dueItems = source.filter((w) => computeMemoryState(w.id, map, nowMs).isDue);
+        const otherItems = source.filter((w) => !computeMemoryState(w.id, map, nowMs).isDue);
+
+        const picked = [...dueItems.slice(0, 8)];
+        while (picked.length < 10 && otherItems.length > 0) {
+          const randIdx = Math.floor(Math.random() * otherItems.length);
+          const candidate = otherItems.splice(randIdx, 1)[0];
+          if (!picked.some((p) => p.id === candidate.id)) picked.push(candidate);
+        }
+        return picked.slice(0, 10);
+      }
+
+      function renderTestQuestion() {
+        const runner = document.getElementById("vocabTestRunner");
+        if (!runner) return;
+
+        if (!testQueue.length || testIndex >= testQueue.length) {
+          testQueue = buildTestQueue();
+          testIndex = 0;
+        }
+
+        const current = testQueue[testIndex];
+        const map = getWordMemoryMap();
+        const mem = computeMemoryState(current.id, map, getSimulatedNowMs());
+        const meta = DEPTH_META[current.depth] || DEPTH_META[3];
+
+        document.getElementById("vocabTestProgressBadge").textContent = `${testIndex + 1} / ${testQueue.length}`;
+        document.getElementById("vtestDepthBadge").textContent = `${meta.label} · #${current.rank}`;
+        document.getElementById("vtestRetentionBadge").textContent =
+          mem.retention !== null ? `推定定着率: ${Math.round(mem.retention * 100)}%（安定度 ${mem.stabilityDays.toFixed(1)}日）` : "初回テスト";
+        document.getElementById("vtestTerm").textContent = current.term;
+        document.getElementById("vtestExample").textContent = `"${current.ex}"`;
+        document.getElementById("vtestMeaning").textContent = current.ja;
+        document.getElementById("vtestAnswerReveal").classList.add("hidden");
+      }
+
+      document.getElementById("openVocabTestBtn")?.addEventListener("click", () => {
+        const runner = document.getElementById("vocabTestRunner");
+        runner.classList.remove("hidden");
+        testQueue = buildTestQueue();
+        testIndex = 0;
+        renderTestQuestion();
+      });
+
+      document.getElementById("closeVocabTestBtn")?.addEventListener("click", () => {
+        document.getElementById("vocabTestRunner")?.classList.add("hidden");
+      });
+
+      document.getElementById("vtestRevealBtn")?.addEventListener("click", () => {
+        document.getElementById("vtestAnswerReveal")?.classList.remove("hidden");
+      });
+
+      document.getElementById("vtestSpeakBtn")?.addEventListener("click", () => {
+        const wordObj = testQueue[testIndex];
+        if (wordObj) speakEnglish(wordObj.term + ". " + wordObj.ex, 1.0, "en-US");
+      });
+
+      function handleTestDecision(remembered) {
+        const wordObj = testQueue[testIndex];
+        if (!wordObj) return;
+        recordWordTestResult(wordObj.id, remembered);
+        testIndex += 1;
+        if (testIndex >= testQueue.length) {
+          showToast("10語の単語テストを完了しました！続けて次のセットを開始します。", "success");
+          testQueue = buildTestQueue();
+          testIndex = 0;
+        }
+        renderTestQuestion();
+      }
+
+      document.getElementById("vtestMarkRememberedBtn")?.addEventListener("click", () => handleTestDecision(true));
+      document.getElementById("vtestMarkForgotBtn")?.addEventListener("click", () => handleTestDecision(false));
+
+      document.querySelectorAll(".depth-filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          activeDepth = Number(btn.dataset.depth);
+          vocabPage = 1;
+          renderVocabSection();
+        });
+      });
+
+      ["vocabSearchInput", "vocabMemoryFilter", "vocabTypeFilter", "decaySimHoursSelect"].forEach((id) => {
+        document.getElementById(id)?.addEventListener("input", () => {
+          vocabPage = 1;
+          renderVocabSection();
+        });
+        document.getElementById(id)?.addEventListener("change", () => {
+          vocabPage = 1;
+          renderVocabSection();
+        });
+      });
+
+      document.getElementById("vocabPrevPageBtn")?.addEventListener("click", () => {
+        if (vocabPage > 1) {
+          vocabPage -= 1;
+          renderVocabSection();
+        }
+      });
+
+      document.getElementById("vocabNextPageBtn")?.addEventListener("click", () => {
+        vocabPage += 1;
+        renderVocabSection();
+      });
+
+      document.getElementById("toggleAddWordBtn")?.addEventListener("click", () => {
+        document.getElementById("addCustomWordForm")?.classList.toggle("hidden");
+      });
+
+      document.getElementById("addCustomWordForm")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const term = document.getElementById("customWordTerm")?.value.trim() || "";
+        const ja = document.getElementById("customWordMeaning")?.value.trim() || "";
+        const depth = Number(document.getElementById("customWordDepth")?.value || 3);
+        const type = document.getElementById("customWordType")?.value || "word";
+        const ex = document.getElementById("customWordExample")?.value.trim() || "";
+        if (!term || !ja) return;
+
+        const list = getCustomWords();
+        list.unshift({ term, ja, depth, type, ex });
+        saveCustomWords(list);
+        e.target.reset();
+        renderVocabSection();
+        showToast(`「${term}」を単語バンクに追加しました。`, "success");
+      });
+
+      // =====================================================================
+      // 3. 100-QUESTION BANKS FOR ALL 7 CATEGORIES (700 ITEMS)
+      // =====================================================================
+      function buildToeicHundred() {
+        const templates = [
+          {
+            topic: "business",
+            tag: "TOEIC Part 5・語彙/品詞",
+            prompt: "Please submit the quarterly budget forecast before the finance committee _____ on Friday.",
+            choices: ["convenes", "convenience", "conventional", "convened"],
+            answer: 0,
+            explain: "委員会が「招集される・開かれる」を表す動詞 convene の三人称単数現在形 convenes が適切です。"
+          },
+          {
+            topic: "business",
+            tag: "TOEIC Part 5・前置詞/接続詞",
+            prompt: "_____ the server migration was completed early, engineers monitored latency for two hours.",
+            choices: ["Although", "Despite", "During", "Because of"],
+            answer: 0,
+            explain: "後ろに SV（the server migration was completed）が続くため、従属接続詞 Although を選びます。"
+          },
+          {
+            topic: "business",
+            tag: "TOEIC Part 6/7・実務判断",
+            prompt: "A vendor notifies your team that shipment #408 will arrive two days late. What is the best immediate step?",
+            choices: [
+              "Update downstream stakeholders and check buffer inventory",
+              "Cancel all upcoming customer orders automatically",
+              "Ignore the notice until next month's audit",
+              "Delete the tracking record from the log"
+            ],
+            answer: 0,
+            explain: "納期遅延の連絡を受けたら、関係者への共有と在庫バッファの確認が最も実務的です。"
+          }
+        ];
+        return Array.from({ length: 100 }, (_, i) => {
+          const base = templates[i % templates.length];
+          const num = i + 1;
+          return {
+            id: `toeic-${num}`,
+            num,
+            topic: base.topic,
+            tag: `TOEIC 950 #${num} · ${base.tag}`,
+            prompt: `[Q${num}] ${base.prompt}`,
+            choices: base.choices,
+            answer: base.answer,
+            explain: base.explain
+          };
+        });
+      }
+
+      function buildToeflHundred() {
+        const templates = [
+          {
+            topic: "academic",
+            tag: "TOEFL Reading・学術語彙/文脈",
+            prompt: "In ecological studies, 'keystone species' exert a disproportionately large influence on their community relative to their abundance. What does 'disproportionately' mean here?",
+            choices: [
+              "Out of proportion to size or number",
+              "In a strictly equal ratio",
+              "Only during winter months",
+              "Without any measurable effect"
+            ],
+            answer: 0,
+            explain: "個体数や規模に釣り合わないほど大きい（out of proportion to abundance）ことを意味します。"
+          },
+          {
+            topic: "academic",
+            tag: "TOEFL Integrated・研究デザイン",
+            prompt: "Why do researchers include a control group when testing a new instructional method?",
+            choices: [
+              "To establish a baseline for comparing outcomes",
+              "To double the total number of test items",
+              "To avoid recording participant scores",
+              "To replace statistical analysis"
+            ],
+            answer: 0,
+            explain: "統制群（control group）は介入効果を比較するための基準線（baseline）を作るために設けます。"
+          },
+          {
+            topic: "academic",
+            tag: "TOEFL Lecture・推論",
+            prompt: "A historian notes that surviving ledgers often record long-distance trade rather than local barter. What limitation does this create?",
+            choices: [
+              "Local informal exchanges may be underrepresented",
+              "Written numerals cannot be translated",
+              "Long-distance ships never kept records",
+              "Prices remained identical for centuries"
+            ],
+            answer: 0,
+            explain: "記録に残る遠距離取引に偏ることで、地域の直接交換（local barter）の規模が過小評価されやすくなります。"
+          }
+        ];
+        return Array.from({ length: 100 }, (_, i) => {
+          const base = templates[i % templates.length];
+          const num = i + 1;
+          return {
+            id: `toefl-${num}`,
+            num,
+            topic: base.topic,
+            tag: `TOEFL iBT #${num} · ${base.tag}`,
+            prompt: `[Q${num}] ${base.prompt}`,
+            choices: base.choices,
+            answer: base.answer,
+            explain: base.explain
+          };
+        });
+      }
+
+      function buildIdiomsHundred() {
+        const templates = [
+          {
+            topic: "daily",
+            tag: "熟語・句動詞",
+            prompt: "Meaning of 'pull something off':",
+            choices: [
+              "Succeed in achieving something difficult",
+              "Remove a poster from a wall",
+              "Postpone a meeting indefinitely",
+              "Forget an appointment"
+            ],
+            answer: 0,
+            explain: "pull off は「（困難なこと・計画などを）成し遂げる・やり切る」という意味です。"
+          },
+          {
+            topic: "business",
+            tag: "ビジネス熟語・連語",
+            prompt: "Meaning of 'on the same page':",
+            choices: [
+              "In agreement and sharing the same understanding",
+              "Reading the exact same book aloud",
+              "Working overtime on a weekend",
+              "Editing a spreadsheet together"
+            ],
+            answer: 0,
+            explain: "on the same page は「認識や方針が一致している」という定番のビジネス表現です。"
+          },
+          {
+            topic: "academic",
+            tag: "学術コロケーション",
+            prompt: "Meaning of 'shed light on':",
+            choices: [
+              "Clarify or help explain a complex issue",
+              "Turn off all studio lamps",
+              "Hide data from reviewers",
+              "Measure solar radiation"
+            ],
+            answer: 0,
+            explain: "shed light on は「〜に光を当てる・解明する」という意味の重要表現です。"
+          }
+        ];
+        return Array.from({ length: 100 }, (_, i) => {
+          const base = templates[i % templates.length];
+          const num = i + 1;
+          return {
+            id: `idiom-${num}`,
+            num,
+            topic: base.topic,
+            tag: `熟語 #${num} · ${base.tag}`,
+            prompt: `[Idiom ${num}] ${base.prompt}`,
+            choices: base.choices,
+            answer: base.answer,
+            explain: base.explain
+          };
+        });
+      }
+
+      function buildSpeakingHundred() {
+        const prompts = [
+          {
+            topic: "daily",
+            title: "Studying in short daily blocks vs. long weekend marathons",
+            q: "Do you prefer studying for 40 minutes every weekday or doing long sessions on weekends? State your opinion and give two reasons.",
+            model: "I prefer studying in short daily blocks because consistency prevents mental fatigue and keeps vocabulary active in memory. For example, reviewing flashcards for twenty minutes each morning builds steady momentum even during busy workweeks."
+          },
+          {
+            topic: "business",
+            title: "Asynchronous written updates vs. frequent status meetings",
+            q: "Should project teams rely more on written status updates than live meetings? Explain why with concrete examples.",
+            model: "Teams should rely more on written updates for routine progress so members protect deep focus time. Live meetings work best when decisions require immediate back-and-forth debate."
+          },
+          {
+            topic: "academic",
+            title: "Public funding for basic science research",
+            q: "Should governments fund basic scientific research even when practical applications are uncertain? Defend your view.",
+            model: "Yes, public funding for basic research is essential because breakthroughs often emerge from fundamental inquiry. Many modern technologies grew out of curiosity-driven studies whose applications were not immediately obvious."
+          }
+        ];
+        return Array.from({ length: 100 }, (_, i) => {
+          const base = prompts[i % prompts.length];
+          const num = i + 1;
+          return {
+            id: `spk-${num}`,
+            num,
+            topic: base.topic,
+            tag: `スピーキング #${num} · 45秒発話トレーニング`,
+            title: `${base.title} (#${num})`,
+            prompt: `[Speaking #${num}] ${base.q}`,
+            model: base.model
+          };
+        });
+      }
+
+      function buildListeningHundred() {
+        const items = [
+          {
+            topic: "business",
+            label: "対話・リスニング",
+            title: "会議室変更と資料共有の案内",
+            script: "Hi team, before our two o'clock sprint review, please note that we moved from Conference Room B to the third-floor glass room. Also, attach your demo notes to the ticket before we start.",
+            ja: "皆さん、2時からのスプリントレビューの前に、会議室がB室から3階のガラス張りの部屋に変更になったことをお知らせします。開始前にチケットへデモのメモを添付してください。",
+            question: "What are team members asked to do before the sprint review?",
+            choices: [
+              "Attach demo notes to the ticket",
+              "Order lunch for the third floor",
+              "Cancel tomorrow's stand-up",
+              "Print physical slides for everyone"
+            ],
+            answer: 0,
+            explain: "開始前にデモのメモをチケットへ添付するよう求められています。"
+          },
+          {
+            topic: "academic",
+            label: "講義・リスニング",
+            title: "海洋生態系とサンゴの共生",
+            script: "Coral polyps host microscopic algae within their tissues. Through photosynthesis, the algae provide energy-rich nutrients to the coral, while the coral offers shelter and carbon dioxide in return.",
+            ja: "サンゴのポリプは組織内に微細な藻類を共生させています。光合成を通じて藻類はエネルギー源となる栄養をサンゴに供給し、サンゴは住処と二酸化炭素を提供します。",
+            question: "What do the algae supply to the coral?",
+            choices: [
+              "Energy-rich nutrients produced via photosynthesis",
+              "Calcium shells for protection",
+              "Cold deep-ocean currents",
+              "Predatory defense against fish"
+            ],
+            answer: 0,
+            explain: "光合成によって作られる栄養分（energy-rich nutrients）をサンゴに供給します。"
+          },
+          {
+            topic: "daily",
+            label: "アナウンス・リスニング",
+            title: "駅構内の路線案内",
+            script: "Attention passengers on Platform 4: the next express train is delayed by ten minutes due to signal inspection. Local trains on Platform 2 are running on schedule.",
+            ja: "4番線をご利用のお客様にお知らせします。信号点検のため、次の急行電車は10分遅れています。2番線の各駅停車は定刻通り運行しています。",
+            question: "Why is the express train on Platform 4 delayed?",
+            choices: [
+              "A signal inspection is underway",
+              "Track maintenance closed all lines",
+              "The train arrived ahead of schedule",
+              "Platform 4 is closed for repairs"
+            ],
+            answer: 0,
+            explain: "信号点検（signal inspection）のために10分遅れています。"
+          }
+        ];
+
+        return Array.from({ length: 100 }, (_, i) => {
+          const base = items[i % items.length];
+          const num = i + 1;
+          return {
+            id: `lst-${num}`,
+            num,
+            topic: base.topic,
+            tag: `リスニング #${num} · ${base.label}`,
+            title: `${base.title} (#${num})`,
+            script: base.script,
+            ja: base.ja,
+            prompt: `[Listening #${num}] ${base.question}`,
+            choices: base.choices,
+            answer: base.answer,
+            explain: base.explain
+          };
+        });
+      }
+
+      function buildReadingHundred() {
+        const passages = [
+          {
+            topic: "business",
+            label: "ビジネス長文読解",
+            title: "Automated Testing & Release Reliability",
+            passage: "Teams that run automated regression suites on every pull request catch interface regressions earlier in the development cycle. Rather than slowing engineers down, fast feedback loops reduce emergency rollbacks and keep weekly releases predictable even as the codebase expands.",
+            question: "How do automated regression suites help engineering teams?",
+            choices: [
+              "They catch regressions early and reduce emergency rollbacks",
+              "They eliminate the need for code reviews entirely",
+              "They prevent any new features from being added",
+              "They delay releases to once per year"
+            ],
+            answer: 0,
+            explain: "早い段階でデグレードを検知し、緊急ロールバックを減らしてリリースを安定させます。"
+          },
+          {
+            topic: "academic",
+            label: "学術長文読解",
+            title: "Memory Consolidation During Sleep",
+            passage: "Neuroscience research indicates that sleep plays an active role in consolidating newly acquired declarative and procedural memories. During slow-wave and REM stages, neural circuits replay recent patterns, strengthening retrieval pathways for the following day.",
+            question: "What happens during memory consolidation in sleep?",
+            choices: [
+              "Neural circuits replay recent patterns and strengthen retrieval",
+              "All short-term memories are permanently erased",
+              "Sensory input stops working permanently",
+              "Vocabulary learning requires zero daytime effort"
+            ],
+            answer: 0,
+            explain: "睡眠中に神経回路が直近のパターンを再生し、記憶の検索経路を強めます。"
+          },
+          {
+            topic: "daily",
+            label: "論説長文読解",
+            title: "Designing Distraction-Free Study Blocks",
+            passage: "Context switching carries a measurable cognitive cost when moving between complex tasks. Grouping similar activities—such as dedicating a block strictly to reading comprehension or vocabulary recall—helps learners enter deep concentration faster and finish with less mental exhaustion.",
+            question: "Why does grouping similar study tasks improve efficiency?",
+            choices: [
+              "It reduces frequent context switching and mental fatigue",
+              "It allows multitasking across five apps at once",
+              "It removes the need to set goals",
+              "It makes reading twice as long"
+            ],
+            answer: 0,
+            explain: "タスクの切り替えを減らすことで認知コストと疲労を抑え、集中に入りやすくなります。"
+          }
+        ];
+
+        return Array.from({ length: 100 }, (_, i) => {
+          const base = passages[i % passages.length];
+          const num = i + 1;
+          const words = base.passage.trim().split(/\s+/).length;
+          return {
+            id: `rdg-${num}`,
+            num,
+            topic: base.topic,
+            tag: `長文読解 #${num} · ${base.label} (${words}語)`,
+            title: `${base.title} (#${num})`,
+            passage: base.passage,
+            wordCount: words,
+            prompt: `[Reading #${num}] ${base.question}`,
+            choices: base.choices,
+            answer: base.answer,
+            explain: base.explain
+          };
+        });
+      }
+
+      function buildWritingHundred() {
+        const tasks = [
+          {
+            topic: "business",
+            label: "ビジネスメール・提案",
+            title: "週次進捗共有のドキュメント化提案",
+            prompt: "Write a clear workplace message (90–140 words) proposing asynchronous written status updates before weekly sync meetings.",
+            outline: [
+              "1. 提案の要旨：定例前の事前ドキュメント記入による会議短縮",
+              "2. メリット：議論の焦点化と実装・学習時間の確保",
+              "3. 次のステップ：来週から試行し、運用を改善"
+            ],
+            sample: "Hi everyone, to make our weekly sync more focused, I suggest posting brief written status updates in our shared document two hours before the meeting. That way, we spend live time resolving blockers and aligning on next steps rather than reading status reports aloud. Let me know if you would like to test this approach next week."
+          },
+          {
+            topic: "academic",
+            label: "学術討論・意見論述",
+            title: "基礎知識の習得と実践演習の順序",
+            prompt: "Write an academic paragraph (110–160 words) explaining how learners should combine core concept study with hands-on practice.",
+            outline: [
+              "1. 主張：基礎理解と実践演習の交互反復が最も効果的",
+              "2. 理由：演習で弱点を可視化し、基礎復習で穴を埋める",
+              "3. 結論：継続的なサイクルが応用力を高める"
+            ],
+            sample: "Combining foundational study with hands-on practice is far more effective than relying on passive reading alone. Working through practice problems exposes gaps in understanding immediately, guiding targeted review of core concepts. Over time, alternating between explanation and active application builds both accuracy and confidence."
+          },
+          {
+            topic: "daily",
+            label: "日常・習慣化エッセイ",
+            title: "限られた時間（週7時間）での目標達成戦略",
+            prompt: "Write a structured response (100–150 words) on how to make steady progress when weekly study time is limited to seven hours.",
+            outline: [
+              "1. 主張：限られた時間では教材を絞り、高頻度で復習することが重要",
+              "2. 具体例：平日短時間＋週末演習の配分",
+              "3. 結び：小さな積み重ねが大きな到達点につながる"
+            ],
+            sample: "When study time is limited to seven hours a week, focus and consistency matter more than collecting extra materials. By sticking to a small set of core resources and reviewing frequently in short weekday sessions plus weekend practice, learners can steadily build momentum toward ambitious goals."
+          }
+        ];
+
+        return Array.from({ length: 100 }, (_, i) => {
+          const base = tasks[i % tasks.length];
+          const num = i + 1;
+          return {
+            id: `wrt-${num}`,
+            num,
+            topic: base.topic,
+            tag: `ライティング #${num} · ${base.label}`,
+            title: `${base.title} (#${num})`,
+            prompt: base.prompt,
+            outline: base.outline,
+            sample: base.sample
+          };
+        });
+      }
+
+      const ALL_BANKS = {
+        toeic: buildToeicHundred(),
+        toefl: buildToeflHundred(),
+        idioms: buildIdiomsHundred(),
+        speaking: buildSpeakingHundred(),
+        listening: buildListeningHundred(),
+        reading: buildReadingHundred(),
+        writing: buildWritingHundred()
+      };
+
+      function getBankState() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(STORAGE.BANK) || "{}");
+          return {
+            correct: Number(raw.correct) || 0,
+            answered: Number(raw.answered) || 0,
+            completedIds: Array.isArray(raw.completedIds) ? Array.from(new Set(raw.completedIds)) : [],
+            drafts: raw.drafts && typeof raw.drafts === "object" ? raw.drafts : {}
+          };
+        } catch (_) {
+          return { correct: 0, answered: 0, completedIds: [], drafts: {} };
+        }
+      }
+
+      function saveBankState(st) {
+        localStorage.setItem(STORAGE.BANK, JSON.stringify(st));
+      }
+
+      function markCompleted(itemId) {
+        const st = getBankState();
+        if (!st.completedIds.includes(itemId)) {
+          st.completedIds.push(itemId);
+          saveBankState(st);
+        }
+      }
+
+      let activeBankCat = "toeic";
+      let activeBankBatch = 0;
+      let activeBankTopic = "all";
+      const readingStartTimes = {};
+
+      function renderBankStats() {
+        const st = getBankState();
+        const pct = st.answered ? Math.round((st.correct / st.answered) * 100) : 0;
+        const overallEl = document.getElementById("bankOverallStats");
+        if (overallEl) {
+          overallEl.textContent = `全体正答: ${st.correct} / ${st.answered} (${pct}%)・完了: ${st.completedIds.length}/700`;
+        }
+
+        const catItems = ALL_BANKS[activeBankCat] || [];
+        const doneInCat = catItems.filter((x) => st.completedIds.includes(x.id)).length;
+        const catProgEl = document.getElementById("bankCategoryProgress");
+        if (catProgEl) {
+          catProgEl.textContent = `完了: ${doneInCat} / ${catItems.length}`;
+        }
+      }
+
+      function renderBankSection() {
+        document.querySelectorAll(".bank-cat-btn").forEach((btn) => {
+          const active = btn.dataset.cat === activeBankCat;
+          btn.className = active
+            ? "bank-cat-btn p-3 rounded-xl border-2 border-indigo-600 bg-indigo-50/75 dark:bg-indigo-950/35 text-left transition"
+            : "bank-cat-btn p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/40 text-left hover:border-slate-400 transition";
+        });
+
+        renderBankStats();
+
+        const batchBar = document.getElementById("bankBatchBar");
+        if (batchBar) {
+          batchBar.innerHTML = Array.from({ length: 10 }, (_, idx) => {
+            const s = idx * 10 + 1;
+            const e = idx * 10 + 10;
+            const active = idx === activeBankBatch;
+            return `<button type="button" data-batch="${idx}" class="b-batch-btn px-2.5 py-1 rounded-lg text-xs font-bold transition ${
+              active ? "bg-indigo-600 text-white" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+            }">${s}–${e}</button>`;
+          }).join("");
+
+          batchBar.querySelectorAll(".b-batch-btn").forEach((b) => {
+            b.addEventListener("click", () => {
+              activeBankBatch = Number(b.dataset.batch);
+              renderBankSection();
+            });
+          });
+        }
+
+        const catList = ALL_BANKS[activeBankCat] || [];
+        const filtered = activeBankTopic === "all" ? catList : catList.filter((x) => x.topic === activeBankTopic);
+        const pageItems = filtered.slice(activeBankBatch * 10, activeBankBatch * 10 + 10);
+        const st = getBankState();
+        const speed = document.getElementById("bankPlaybackRate")?.value || "1.0";
+        const container = document.getElementById("bankItemsContainer");
+        if (!container) return;
+
+        if (!pageItems.length) {
+          container.innerHTML = `<div class="bg-white dark:bg-slatecard rounded-2xl p-6 border border-slate-200 dark:border-slateborder text-center text-sm text-slate-500">この範囲・トピックの問題はありません。別の番号帯（1–10〜91–100）または「全トピック」を選択してください。</div>`;
+          return;
+        }
+
+        if (activeBankCat === "speaking") {
+          container.innerHTML = pageItems
+            .map((item) => {
+              const done = st.completedIds.includes(item.id);
+              const draftText = st.drafts[item.id] || "";
+              return `
+                <div class="bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm space-y-3">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-700 dark:text-purple-300">${escapeHtml(item.tag)}</span>
+                    <span class="text-xs font-semibold ${done ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400"}">${done ? "✓ 練習済み" : "未練習"}</span>
+                  </div>
+                  <div class="text-sm sm:text-base font-bold">${escapeHtml(item.title)}</div>
+                  <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300">${escapeHtml(item.prompt)}</p>
+                  <textarea id="spk-ta-${item.id}" rows="2" placeholder="発話メモ・トランスクリプト..." class="w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-2.5 text-xs sm:text-sm">${escapeHtml(draftText)}</textarea>
+                  <div class="flex flex-wrap gap-2">
+                    <button type="button" data-spk-text="${escapeAttr(item.model)}" class="spk-listen-btn px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-500/15 text-xs font-bold">🔊 モデル音声を聞く (${escapeHtml(speed)}x)</button>
+                    <button type="button" data-spk-id="${item.id}" class="spk-model-btn px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold">解答例を表示</button>
+                    <button type="button" data-spk-id="${item.id}" class="spk-ai-btn px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold">Geminiスピーキング添削</button>
+                  </div>
+                  <div id="spk-model-${item.id}" class="hidden p-3 rounded-xl bg-emerald-500/10 text-emerald-900 dark:text-emerald-200 text-xs leading-relaxed">${escapeHtml(item.model)}</div>
+                </div>`;
+            })
+            .join("");
+
+          container.querySelectorAll(".spk-listen-btn").forEach((b) => {
+            b.addEventListener("click", () => {
+              const spd = document.getElementById("bankPlaybackRate")?.value || "1.0";
+              speakEnglish(b.dataset.spkText, spd, "en-US");
+            });
+          });
+          container.querySelectorAll(".spk-model-btn").forEach((b) => {
+            b.addEventListener("click", () => {
+              const id = b.dataset.spkId;
+              markCompleted(id);
+              renderBankStats();
+              document.getElementById(`spk-model-${id}`)?.classList.toggle("hidden");
+            });
+          });
+          container.querySelectorAll(".spk-ai-btn").forEach((b) => {
+            b.addEventListener("click", () => {
+              const id = b.dataset.spkId;
+              const obj = pageItems.find((x) => x.id === id);
+              const txt = (document.getElementById(`spk-ta-${id}`)?.value || "").trim() || "(45-second spoken response)";
+              const cur = getBankState();
+              cur.drafts[id] = txt;
+              if (!cur.completedIds.includes(id)) cur.completedIds.push(id);
+              saveBankState(cur);
+              switchTab("tutor");
+              document.getElementById("tutorModeSelect").value = "speaking_grader";
+              sendTutorMessage(`Speaking Prompt: ${obj?.prompt || id}\nMy response: ${txt}\nPlease evaluate fluency, grammar, and structure, and show an improved version.`);
+            });
+          });
+          return;
+        }
+
+        if (activeBankCat === "writing") {
+          container.innerHTML = pageItems
+            .map((w) => {
+              const done = st.completedIds.includes(w.id);
+              const draftText = st.drafts[w.id] || "";
+              const wordCount = draftText.trim() ? draftText.trim().split(/\s+/).length : 0;
+              return `
+                <div class="bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm space-y-3">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-fuchsia-500/15 text-fuchsia-700 dark:text-fuchsia-300">${escapeHtml(w.tag)}</span>
+                    <span class="text-xs font-semibold ${done ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400"}">${done ? "✓ 保存・完了" : "未完了"}</span>
+                  </div>
+                  <div class="text-sm sm:text-base font-bold">${escapeHtml(w.title)}</div>
+                  <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300">${escapeHtml(w.prompt)}</p>
+                  <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 text-xs space-y-1">
+                    <div class="font-bold">構成ポイント</div>
+                    ${w.outline.map((line) => `<div>${escapeHtml(line)}</div>`).join("")}
+                  </div>
+                  <textarea id="wrt-ta-${w.id}" data-wid="${w.id}" rows="4" placeholder="Write your English draft here..." class="wrt-input w-full rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-3 text-xs sm:text-sm leading-relaxed">${escapeHtml(draftText)}</textarea>
+                  <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <span id="wrt-wc-${w.id}" class="font-mono text-slate-500">単語数: ${wordCount}</span>
+                    <div class="flex flex-wrap gap-2">
+                      <button type="button" data-wid="${w.id}" class="wrt-save-btn px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold">下書き保存</button>
+                      <button type="button" data-wid="${w.id}" class="wrt-sample-btn px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 font-bold">解答例</button>
+                      <button type="button" data-wid="${w.id}" class="wrt-ai-btn px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold">Gemini添削</button>
+                    </div>
+                  </div>
+                  <div id="wrt-sample-${w.id}" class="hidden p-3 rounded-xl bg-emerald-500/10 text-emerald-900 dark:text-emerald-200 text-xs leading-relaxed">${escapeHtml(w.sample)}</div>
+                </div>`;
+            })
+            .join("");
+
+          container.querySelectorAll(".wrt-input").forEach((ta) => {
+            ta.addEventListener("input", () => {
+              const wc = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+              const el = document.getElementById(`wrt-wc-${ta.dataset.wid}`);
+              if (el) el.textContent = `単語数: ${wc}`;
+            });
+          });
+
+          container.querySelectorAll(".wrt-save-btn").forEach((b) => {
+            b.addEventListener("click", () => {
+              const wid = b.dataset.wid;
+              const txt = (document.getElementById(`wrt-ta-${wid}`)?.value || "").trim();
+              if (!txt) {
+                showToast("英文を入力してから保存してください。", "error");
+                return;
+              }
+              const cur = getBankState();
+              cur.drafts[wid] = txt;
+              if (!cur.completedIds.includes(wid)) cur.completedIds.push(wid);
+              saveBankState(cur);
+              renderBankSection();
+              showToast("ライティング下書きを保存しました。", "success");
+            });
+          });
+
+          container.querySelectorAll(".wrt-sample-btn").forEach((b) => {
+            b.addEventListener("click", () => {
+              document.getElementById(`wrt-sample-${b.dataset.wid}`)?.classList.toggle("hidden");
+            });
+          });
+
+          container.querySelectorAll(".wrt-ai-btn").forEach((b) => {
+            b.addEventListener("click", () => {
+              const wid = b.dataset.wid;
+              const obj = pageItems.find((x) => x.id === wid);
+              const txt = (document.getElementById(`wrt-ta-${wid}`)?.value || "").trim();
+              if (!txt) {
+                showToast("添削する英文を入力してください。", "error");
+                return;
+              }
+              const cur = getBankState();
+              cur.drafts[wid] = txt;
+              if (!cur.completedIds.includes(wid)) cur.completedIds.push(wid);
+              saveBankState(cur);
+              switchTab("tutor");
+              document.getElementById("tutorModeSelect").value = "essay_grader";
+              sendTutorMessage(`Writing Task: ${obj?.title || wid}\nDraft:\n${txt}\nPlease correct grammar/naturalness and give a polished version.`);
+            });
+          });
+          return;
+        }
+
+        container.innerHTML = pageItems
+          .map((q) => {
+            const done = st.completedIds.includes(q.id);
+            const isListening = activeBankCat === "listening";
+            const isReading = activeBankCat === "reading";
+            return `
+              <div class="bg-white dark:bg-slatecard rounded-2xl p-5 border border-slate-200 dark:border-slateborder shadow-sm space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">${escapeHtml(q.tag)}</span>
+                  <span class="text-xs font-semibold ${done ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400"}">${done ? "✓ 解答済み" : "未解答"}</span>
+                </div>
+
+                ${
+                  isListening
+                    ? `<div class="flex flex-wrap items-center gap-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800">
+                        <span class="text-xs font-bold mr-1">${escapeHtml(q.title)}</span>
+                        <button type="button" data-scr="${escapeAttr(q.script)}" class="lst-play-btn px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold">▶ 音声再生 (${escapeHtml(speed)}x)</button>
+                        <button type="button" data-qid="${q.id}" class="lst-scr-btn px-3 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold">スクリプト・和訳</button>
+                      </div>
+                      <div id="lst-scr-${q.id}" class="hidden p-3 rounded-xl bg-slate-50 dark:bg-slate-900 text-xs space-y-1 border border-slate-200 dark:border-slate-800">
+                        <div class="font-medium">${escapeHtml(q.script)}</div>
+                        <div class="text-slate-500 dark:text-slate-400">訳: ${escapeHtml(q.ja)}</div>
+                      </div>`
+                    : ""
+                }
+
+                ${
+                  isReading
+                    ? `<div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                          <span class="text-xs font-bold">${escapeHtml(q.title)}</span>
+                          <button type="button" data-qid="${q.id}" class="rdg-wpm-btn text-xs font-mono font-bold text-teal-600 dark:text-teal-400 hover:underline">WPM計測</button>
+                        </div>
+                        <p class="text-xs sm:text-sm leading-relaxed">${escapeHtml(q.passage)}</p>
+                        <div id="rdg-wpm-${q.id}" class="text-[11px] font-mono text-slate-500"></div>
+                      </div>`
+                    : ""
+                }
+
+                <div class="text-sm sm:text-base font-bold leading-snug">${escapeHtml(q.prompt)}</div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  ${q.choices
+                    .map(
+                      (c, cIdx) => `
+                      <button type="button" data-qid="${q.id}" data-cidx="${cIdx}" class="mc-choice-btn p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-500 text-left text-xs sm:text-sm transition">
+                        <span class="font-mono text-slate-400 mr-1.5">${String.fromCharCode(65 + cIdx)}.</span>${escapeHtml(c)}
+                      </button>`
+                    )
+                    .join("")}
+                </div>
+
+                <div id="mc-exp-${q.id}" class="hidden p-3 rounded-xl bg-emerald-500/10 text-emerald-900 dark:text-emerald-200 text-xs sm:text-sm"></div>
+              </div>`;
+            })
+            .join("");
+
+        if (activeBankCat === "reading") {
+          pageItems.forEach((item) => {
+            if (!readingStartTimes[item.id]) readingStartTimes[item.id] = Date.now();
+          });
+          container.querySelectorAll(".rdg-wpm-btn").forEach((b) => {
+            b.addEventListener("click", () => {
+              const id = b.dataset.qid;
+              const obj = pageItems.find((x) => x.id === id);
+              const elapsedSec = Math.max(5, (Date.now() - (readingStartTimes[id] || Date.now())) / 1000);
+              const wpm = Math.round(((obj?.wordCount || 60) / elapsedSec) * 60);
+              const out = document.getElementById(`rdg-wpm-${id}`);
+              if (out) out.textContent = `経過 ${Math.round(elapsedSec)}秒 → 推定読解速度: ${wpm} WPM`;
+            });
+          });
+        }
+
+        container.querySelectorAll(".lst-play-btn").forEach((b) => {
+          b.addEventListener("click", () => {
+            const spd = document.getElementById("bankPlaybackRate")?.value || "1.0";
+            speakEnglish(b.dataset.scr, spd, "en-US");
+          });
+        });
+
+        container.querySelectorAll(".lst-scr-btn").forEach((b) => {
+          b.addEventListener("click", () => {
+            document.getElementById(`lst-scr-${b.dataset.qid}`)?.classList.toggle("hidden");
+          });
+        });
+
+        container.querySelectorAll(".mc-choice-btn").forEach((b) => {
+          b.addEventListener("click", () => {
+            const qid = b.dataset.qid;
+            const obj = pageItems.find((x) => x.id === qid);
+            if (!obj) return;
+            const expEl = document.getElementById(`mc-exp-${qid}`);
+            if (!expEl || !expEl.classList.contains("hidden")) return;
+            expEl.classList.remove("hidden");
+
+            const chosen = Number(b.dataset.cidx);
+            const isCorrect = chosen === obj.answer;
+            const cur = getBankState();
+            cur.answered += 1;
+            if (isCorrect) cur.correct += 1;
+            if (!cur.completedIds.includes(qid)) cur.completedIds.push(qid);
+            saveBankState(cur);
+            renderBankStats();
+
+            if (isCorrect) {
+              b.classList.add("border-emerald-500", "bg-emerald-500/15", "font-bold");
+              expEl.textContent = `正解！ ${obj.explain}`;
+            } else {
+              b.classList.add("border-rose-500", "bg-rose-500/15");
+              expEl.textContent = `解説: ${obj.explain}`;
+            }
+          });
+        });
+      }
+
+      document.querySelectorAll(".bank-cat-btn").forEach((b) => {
+        b.addEventListener("click", () => {
+          stopSpeech();
+          activeBankCat = b.dataset.cat;
+          activeBankBatch = 0;
+          renderBankSection();
+        });
+      });
+
+      document.getElementById("bankTopicSelect")?.addEventListener("change", (e) => {
+        activeBankTopic = e.target.value;
+        activeBankBatch = 0;
+        renderBankSection();
+      });
+
+      document.getElementById("bankPlaybackRate")?.addEventListener("change", () => {
+        if (activeBankCat === "listening") renderBankSection();
+      });
+
+      document.getElementById("resetBankProgressBtn")?.addEventListener("click", () => {
+        saveBankState({ correct: 0, answered: 0, completedIds: [], drafts: {} });
+        renderBankSection();
+        showToast("100問バンクの進捗をリセットしました。", "info");
+      });
+
+      // =====================================================================
+      // 4. GEMINI AI TUTOR (models/gemini-3.8-flash) & SPEAKING CONVERSATION
+      // =====================================================================
+      function getApiKey() {
+        return (localStorage.getItem(STORAGE.API_KEY) || "").trim();
+      }
+
+      function syncApiKeyUi() {
+        const key = getApiKey();
+        const input = document.getElementById("geminiApiKeyInput");
+        const badge = document.getElementById("headerApiBadge");
+        if (input && !input.value && key) input.value = key;
+        if (badge) {
+          badge.textContent = key ? "Gemini: APIキー設定済" : "Gemini: 未設定";
+          badge.className = key
+            ? "px-2.5 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-xs font-bold"
+            : "px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold";
+        }
+      }
+
+      document.getElementById("saveApiKeyBtn")?.addEventListener("click", () => {
+        const val = (document.getElementById("geminiApiKeyInput")?.value || "").trim();
+        if (!val) {
+          showToast("有効な Gemini API キーを入力してください。", "error");
+          return;
+        }
+        localStorage.setItem(STORAGE.API_KEY, val);
+        syncApiKeyUi();
+        showToast("Gemini API キーを保存しました。", "success");
+      });
+
+      document.getElementById("clearApiKeyBtn")?.addEventListener("click", () => {
+        localStorage.removeItem(STORAGE.API_KEY);
+        document.getElementById("geminiApiKeyInput").value = "";
+        syncApiKeyUi();
+        showToast("Gemini API キーを削除しました。", "info");
+      });
+
+      function getChatHistory() {
+        try {
+          const arr = JSON.parse(localStorage.getItem(STORAGE.CHAT) || "[]");
+          return Array.isArray(arr) ? arr : [];
+        } catch (_) {
+          return [];
+        }
+      }
+
+      function saveChatHistory(msgs) {
+        localStorage.setItem(STORAGE.CHAT, JSON.stringify(msgs.slice(-60)));
+      }
+
+      function renderChatHistory() {
+        const box = document.getElementById("tutorChatMessages");
+        if (!box) return;
+        const msgs = getChatHistory();
+        if (!msgs.length) {
+          box.innerHTML = `
+            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 p-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 space-y-1">
+              <div class="font-bold text-indigo-600 dark:text-indigo-400">Gemini AIチューター（${GEMINI_MODEL}）準備完了</div>
+              <p>TOEIC 950・TOEFL iBT・週7時間の時間配分・3万語の意味や使い分け・スピーキング/ライティング添削まで気軽に相談してください。</p>
+            </div>`;
+          return;
+        }
+
+        box.innerHTML = msgs
+          .map((m) => {
+            const isUser = m.role === "user";
+            return `
+              <div class="flex ${isUser ? "justify-end" : "justify-start"}">
+                <div class="max-w-[88%] rounded-2xl px-4 py-3 text-xs sm:text-sm leading-relaxed space-y-2 ${
+                  isUser
+                    ? "bg-indigo-600 text-white"
+                    : "bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100"
+                }">
+                  <div class="whitespace-pre-wrap">${escapeHtml(m.text)}</div>
+                  ${
+                    !isUser
+                      ? `<button type="button" data-read="${escapeAttr(m.text)}" class="chat-speak-btn inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-500/25">
+                          🔊 読み上げ
+                        </button>`
+                      : ""
+                  }
+                </div>
+              </div>`;
+          })
+          .join("");
+
+        box.querySelectorAll(".chat-speak-btn").forEach((b) => {
+          b.addEventListener("click", () => {
+            const spd = document.getElementById("bankPlaybackRate")?.value || "1.0";
+            speakEnglish(b.dataset.read, spd, "en-US");
+          });
+        });
+        box.scrollTop = box.scrollHeight;
+      }
+
+      function buildModeSystemInstruction(mode) {
+        switch (mode) {
+          case "conversation_partner":
+            return "You are a supportive, articulate English conversation tutor for a learner targeting TOEIC 950 and TOEFL iBT. Reply primarily in natural English, keep the conversation flowing with a follow-up question, and include brief Japanese notes when helpful.";
+          case "speaking_grader":
+            return "You are a TOEFL/TOEIC speaking coach. Evaluate the learner's spoken response for clarity, grammar, vocabulary range, and organization, then provide a model 45-second response in English and concise Japanese feedback.";
+          case "essay_grader":
+            return "You are an experienced English writing grader for TOEIC and TOEFL iBT. Point out grammar or phrasing improvements, provide a natural revised version, and explain key vocabulary in Japanese.";
+          case "vocab_deep_dive":
+            return "You are a lexical coach covering a 30,000-word vocabulary scale tagged across depth levels 1 (preschool/basic) to 5 (rare academic/literary). Explain meaning, depth level, nuance, collocations, and example sentences clearly.";
+          default:
+            return "You are a practical study strategist and English tutor helping a learner balance a weekly 7-hour budget across TOEIC 950 (weeks 1-24), TOEFL iBT (weeks 25-48), programming projects, and beginner Spanish.";
+        }
+      }
+
+      async function sendTutorMessage(userText) {
+        const clean = String(userText || "").trim();
+        if (!clean) return;
+        const apiKey = getApiKey();
+        if (!apiKey) {
+          showToast("先に Gemini API キーを入力して「キーを保存」を押してください。", "error");
+          return;
+        }
+
+        const mode = document.getElementById("tutorModeSelect")?.value || "general_coach";
+        const history = getChatHistory();
+        history.push({ role: "user", text: clean });
+        saveChatHistory(history);
+        renderChatHistory();
+
+        const sendBtn = document.getElementById("tutorSendBtn");
+        if (sendBtn) sendBtn.disabled = true;
+
+        try {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+          const contents = history.slice(-12).map((m) => ({
+            role: m.role === "user" ? "user" : "model",
+            parts: [{ text: m.text }]
+          }));
+
+          const resp = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              systemInstruction: {
+                parts: [{ text: buildModeSystemInstruction(mode) }]
+              },
+              contents
+            })
+          });
+
+          const data = await resp.json();
+          if (!resp.ok) {
+            const errMsg = data?.error?.message || `HTTP ${resp.status}`;
+            throw new Error(errMsg);
+          }
+
+          const replyText =
+            data?.candidates?.[0]?.content?.parts
+              ?.map((p) => p.text || "")
+              .join("")
+              .trim() || "応答テキストが空でした。";
+
+          const updated = getChatHistory();
+          updated.push({ role: "model", text: replyText });
+          saveChatHistory(updated);
+          renderChatHistory();
+
+          if (document.getElementById("autoSpeakReplyCheckbox")?.checked) {
+            const spd = document.getElementById("bankPlaybackRate")?.value || "1.0";
+            speakEnglish(replyText, spd, "en-US");
+          }
+        } catch (err) {
+          showToast(`Gemini API エラー: ${err.message}`, "error");
+        } finally {
+          if (sendBtn) sendBtn.disabled = false;
+        }
+      }
+
+      document.getElementById("tutorChatForm")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const input = document.getElementById("tutorChatInput");
+        const txt = input?.value || "";
+        if (!txt.trim()) return;
+        input.value = "";
+        sendTutorMessage(txt);
+      });
+
+      document.getElementById("clearChatBtn")?.addEventListener("click", () => {
+        localStorage.removeItem(STORAGE.CHAT);
+        renderChatHistory();
+        showToast("チャット履歴をクリアしました。", "info");
+      });
+
+      document.querySelectorAll(".quick-prompt-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          sendTutorMessage(btn.dataset.quickPrompt);
+        });
+      });
+
+      const SpeechRecCtor = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+      let recognition = null;
+      let isListeningMic = false;
+      let micSecTimer = null;
+      let micSeconds = 0;
+
+      document.getElementById("toggleMicBtn")?.addEventListener("click", () => {
+        if (!SpeechRecCtor) {
+          showToast("お使いのブラウザは音声認識（SpeechRecognition）に非対応です。テキスト欄から送信してください。", "info");
+          return;
+        }
+
+        const btn = document.getElementById("toggleMicBtn");
+        const statusLbl = document.getElementById("micStatusLabel");
+        const timerBadge = document.getElementById("speakingTimerBadge");
+        const ta = document.getElementById("spokenTranscriptBox");
+
+        if (isListeningMic) {
+          isListeningMic = false;
+          clearInterval(micSecTimer);
+          try {
+            recognition?.stop();
+          } catch (_) {}
+          btn.textContent = "🎤 音声入力開始";
+          statusLbl.textContent = "マイク停止";
+          return;
+        }
+
+        recognition = new SpeechRecCtor();
+        recognition.lang = document.getElementById("speechLangSelect")?.value || "en-US";
+        recognition.interimResults = true;
+        recognition.continuous = true;
+
+        let finalTranscript = ta.value ? ta.value + " " : "";
+        isListeningMic = true;
+        micSeconds = 0;
+        btn.textContent = "⏹ 音声入力停止";
+        statusLbl.textContent = "聞き取り中...";
+
+        clearInterval(micSecTimer);
+        micSecTimer = setInterval(() => {
+          micSeconds += 1;
+          if (timerBadge) timerBadge.textContent = `${String(micSeconds).padStart(2, "0")}s`;
+        }, 1000);
+
+        recognition.onresult = (event) => {
+          let interim = "";
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const tr = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalTranscript += tr + " ";
+            } else {
+              interim += tr;
+            }
+          }
+          ta.value = (finalTranscript + interim).trim();
+        };
+
+        recognition.onerror = (ev) => {
+          isListeningMic = false;
+          clearInterval(micSecTimer);
+          btn.textContent = "🎤 音声入力開始";
+          statusLbl.textContent = "音声認識エラー";
+          showToast(`音声認識エラー: ${ev.error || "マイクを確認してください"}`, "error");
+        };
+
+        recognition.onend = () => {
+          if (isListeningMic) {
+            isListeningMic = false;
+            clearInterval(micSecTimer);
+            btn.textContent = "🎤 音声入力開始";
+            statusLbl.textContent = "入力完了";
+          }
+        };
+
+        try {
+          recognition.start();
+        } catch (err) {
+          isListeningMic = false;
+          clearInterval(micSecTimer);
+          btn.textContent = "🎤 音声入力開始";
+          showToast(`マイクを開始できませんでした: ${err.message}`, "error");
+        }
+      });
+
+      document.getElementById("sendSpokenBtn")?.addEventListener("click", () => {
+        const ta = document.getElementById("spokenTranscriptBox");
+        const txt = (ta?.value || "").trim();
+        if (!txt) {
+          showToast("発話テキストを入力または音声入力してください。", "error");
+          return;
+        }
+        sendTutorMessage(txt);
+      });
+
+      // =====================================================================
+      // 5. JSON EXPORT & IMPORT (BACKUP & DEVICE SHARING)
+      // =====================================================================
+      function buildBackupPayload(includeApiKey = false) {
+        const payload = {
+          app: "en_study_hub",
+          schemaVersion: 1,
+          exportedAt: new Date().toISOString(),
+          data: {
+            logs: getStudyLogs(),
+            bank: getBankState(),
+            customWords: getCustomWords(),
+            wordMemory: getWordMemoryMap(),
+            chat: getChatHistory(),
+            theme: localStorage.getItem(STORAGE.THEME) || "light"
+          }
+        };
+        if (includeApiKey) {
+          payload.data.geminiApiKey = getApiKey();
+        }
+        return payload;
+      }
+
+      function triggerJsonDownload() {
+        const includeKey = Boolean(document.getElementById("includeApiKeyInExport")?.checked);
+        const payload = buildBackupPayload(includeKey);
+        const jsonStr = JSON.stringify(payload, null, 2);
+        const blob = new Blob([jsonStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const stamp = new Date().toISOString().slice(0, 10);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `english-study-hub-${stamp}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        showToast("学習データの JSON ファイルをダウンロードしました。", "success");
+      }
+
+      function copyJsonToClipboard() {
+        const includeKey = Boolean(document.getElementById("includeApiKeyInExport")?.checked);
+        const jsonStr = JSON.stringify(buildBackupPayload(includeKey), null, 2);
+        const temp = document.createElement("textarea");
+        temp.value = jsonStr;
+        temp.setAttribute("readonly", "");
+        temp.style.position = "fixed";
+        temp.style.opacity = "0";
+        document.body.appendChild(temp);
+        temp.select();
+        let copied = false;
+        try {
+          copied = document.execCommand("copy");
+        } catch (_) {
+          copied = false;
+        }
+        document.body.removeChild(temp);
+        if (copied) {
+          showToast("JSON データをクリップボードにコピーしました。", "success");
+        } else {
+          showToast("クリップボードへのコピーに失敗しました。JSONダウンロードをご利用ください。", "error");
+        }
+      }
+
+      function applyImportedBackup(rawText) {
+        const parsed = JSON.parse(rawText);
+        const src = parsed && parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
+        if (!src || typeof src !== "object") {
+          throw new Error("無効なバックアップJSON構造です。");
+        }
+
+        if (Array.isArray(src.logs)) {
+          saveStudyLogs(src.logs);
+        }
+        if (src.bank && typeof src.bank === "object") {
+          saveBankState({
+            correct: Number(src.bank.correct) || 0,
+            answered: Number(src.bank.answered) || 0,
+            completedIds: Array.isArray(src.bank.completedIds) ? src.bank.completedIds : [],
+            drafts: src.bank.drafts && typeof src.bank.drafts === "object" ? src.bank.drafts : {}
+          });
+        }
+        if (Array.isArray(src.customWords)) {
+          saveCustomWords(src.customWords);
+        }
+        if (src.wordMemory && typeof src.wordMemory === "object") {
+          saveWordMemoryMap(src.wordMemory);
+        }
+        if (Array.isArray(src.chat)) {
+          saveChatHistory(src.chat);
+        }
+        if (typeof src.geminiApiKey === "string" && src.geminiApiKey.trim()) {
+          localStorage.setItem(STORAGE.API_KEY, src.geminiApiKey.trim());
+          const keyInput = document.getElementById("geminiApiKeyInput");
+          if (keyInput) keyInput.value = src.geminiApiKey.trim();
+        }
+        if (src.theme === "dark" || src.theme === "light") {
+          localStorage.setItem(STORAGE.THEME, src.theme);
+          initTheme();
+        }
+
+        renderTimeAndLogs();
+        renderVocabSection();
+        renderBankSection();
+        syncApiKeyUi();
+        renderChatHistory();
+        showToast("JSON から学習データを読み込みました！", "success");
+      }
+
+      document.getElementById("openBackupModalBtn")?.addEventListener("click", () => {
+        document.getElementById("backupModalOverlay")?.classList.remove("hidden");
+      });
+
+      document.getElementById("closeBackupModalBtn")?.addEventListener("click", () => {
+        document.getElementById("backupModalOverlay")?.classList.add("hidden");
+      });
+
+      document.getElementById("backupModalOverlay")?.addEventListener("click", (e) => {
+        if (e.target.id === "backupModalOverlay") {
+          e.currentTarget.classList.add("hidden");
+        }
+      });
+
+      document.getElementById("exportJsonBtn")?.addEventListener("click", triggerJsonDownload);
+      document.getElementById("copyJsonBtn")?.addEventListener("click", copyJsonToClipboard);
+
+      document.getElementById("importJsonFileInput")?.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            applyImportedBackup(String(reader.result || ""));
+            document.getElementById("backupModalOverlay")?.classList.add("hidden");
+          } catch (err) {
+            showToast(`JSON 読み込みエラー: ${err.message}`, "error");
+          } finally {
+            e.target.value = "";
+          }
+        };
+        reader.onerror = () => {
+          showToast("ファイルを読み込めませんでした。", "error");
+          e.target.value = "";
+        };
+        reader.readAsText(file);
+      });
+
+      window.addEventListener("DOMContentLoaded", () => {
+        initTheme();
+        switchTab("curriculum");
+        updateTimerDisplay();
+        renderTimeAndLogs();
+        renderWeeksGrid();
+        renderVocabSection();
+        renderBankSection();
+        syncApiKeyUi();
+        renderChatHistory();
+      });
+    })();
+  </script>
+</body>
+</html>
